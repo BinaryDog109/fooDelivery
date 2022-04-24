@@ -1,13 +1,12 @@
-import logo from './logo.svg';
-import './App.css';
+import './css/App.css';
 import React from "react"
-import Signup from "./Signup"
+import Signup from "./auth/Signup"
 import { Container } from "react-bootstrap"
-import {AuthProvider, useAuth} from "./AuthContext"
+import {AuthProvider, useAuth} from "./auth/AuthContext"
 import {BrowserRouter as Router, Routes, Route, Navigate} from "react-router-dom"
 import Dashboard from "./Dashboard"
-import Login from "./Login"
-import ForgotPassword from "./ForgotPassword"
+import Login from "./auth/Login"
+import ForgotPassword from "./auth/ForgotPassword"
 import UpdateProfile from "./UpdateProfile"
 
 function PrivateRoute ({ children }) {
