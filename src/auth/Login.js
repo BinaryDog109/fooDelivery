@@ -3,6 +3,8 @@ import { Form, Button, Card, Alert } from "react-bootstrap"
 import 'bootstrap/dist/css/bootstrap.css';
 import { useAuth } from "./AuthContext"
 import { Link, useNavigate  } from "react-router-dom"
+import {auth, signInWithGoogle} from '../firebase/firebase';
+import firebase from 'firebase/compat/app';
 
 export default function Login() {
     const emailRef = useRef()
@@ -23,8 +25,20 @@ export default function Login() {
         } catch {
             setError("Failed to log in")
         }
-
         setLoading(false)
+    }
+
+    // google auth
+    const provider = new firebase.auth.GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
+    const signInWithGoogle = () => {
+        try {
+            setError("")
+            setLoading(true)
+            auth.signInWithPopup(provider).then(r => navigate("/"));
+        } catch {
+            setError("Failed to log in")
+        }
     }
 
     return (
@@ -42,9 +56,13 @@ export default function Login() {
                             <Form.Label>Password</Form.Label>
                             <Form.Control type="password" ref={passwordRef} required />
                         </Form.Group>
-                        <Button disabled={loading} className="w-100" type="submit">
+                        <Button disabled={loading} className="w-100 mt-2" type="submit">
                             Log In
                         </Button>
+
+                        <div>
+                            <Button className="w-100 mt-3" onClick={signInWithGoogle}>Sign in with google</Button>
+                        </div>
                     </Form>
                     <div className="w-100 text-center mt-3">
                         <Link to="/forgot-password">Forgot Password?</Link>
