@@ -9,6 +9,7 @@ import Login from "./auth/Login"
 import ForgotPassword from "./auth/ForgotPassword"
 import UpdateProfile from "./UpdateProfile"
 
+// If the user is logged in, go on and display the component in question;
 function PrivateRoute ({ children }) {
   const auth = useAuth();
   return auth ? children : <Navigate to="/login" />;
