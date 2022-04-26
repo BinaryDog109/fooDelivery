@@ -3,7 +3,7 @@ import styles from "./Navbar.module.css";
 import { BellIcon, SettingsIcon } from "@chakra-ui/icons";
 
 export const Navbar = () => {
-    const iconSize = 8
+  const iconSize = 8;
   return (
     <header className={styles.header}>
       <div className={styles.logo}>
@@ -12,11 +12,12 @@ export const Navbar = () => {
         {/* <input type="text" /> */}
       </div>
       <nav className={styles.links}>
+        
         <Link to={"/"}>
           <BellIcon w={iconSize} h={iconSize} />
         </Link>
         <Link to={"/"}>
-          <SettingsIcon w={iconSize} h={iconSize}/>
+          <SettingsIcon w={iconSize} h={iconSize} />
         </Link>
         <div className="notification">{/* Icon */}</div>
       </nav>

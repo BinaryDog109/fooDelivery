@@ -1,0 +1,8 @@
+.image {
+    width: 100%;
+    height: 200px;
+    border-radius: var(--chakra-radii-md);
+    object-fit: cover;
+    object-position: center;
+    margin-bottom: 1em;
+}
