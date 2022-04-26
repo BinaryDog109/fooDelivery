@@ -3,10 +3,14 @@ import { Form, Button, Card, Alert } from "react-bootstrap"
 import 'bootstrap/dist/css/bootstrap.css';
 import { useAuth } from "./AuthContext"
 import { Link, useNavigate  } from "react-router-dom"
+import { db } from "../firebase/firebase"
+import "firebase/storage";
 
 export default function Signup() {
     const emailRef = useRef()
     const passwordRef = useRef()
+    const firstnameRef = useRef()
+    const lastnameRef = useRef()
     const passwordConfirmRef = useRef()
     const { signup } = useAuth()
     const [error, setError] = useState("")
@@ -23,7 +27,21 @@ export default function Signup() {
         try {
             setError("")
             setLoading(true)
-            await signup(emailRef.current.value, passwordRef.current.value)
+            const user = await signup(emailRef.current.value, passwordRef.current.value)
+
+            const DocRef = db.collection("Users").doc(user.uid);
+            const pushData = await DocRef.set(
+                {
+                    firstname: firstnameRef.current.value,
+                    lastname: lastnameRef.current.value,
+                    email: emailRef.current.value,
+                    // id: user.uid,
+                    role: "customer",
+                    address: ["","",""]
+                },
+                { merge: true }
+            );
+            console.log("Document set in FireStore", pushData);
             navigate("/")
         } catch {
             setError("Failed to create an account")
@@ -42,6 +60,14 @@ export default function Signup() {
                         <Form.Group id="email">
                             <Form.Label>Email</Form.Label>
                             <Form.Control type="email" ref={emailRef} required />
+                        </Form.Group>
+                        <Form.Group id="firstname">
+                            <Form.Label>Firstname</Form.Label>
+                            <Form.Control  ref={firstnameRef} required />
+                        </Form.Group>
+                        <Form.Group id="lastname">
+                            <Form.Label>Lastname</Form.Label>
+                            <Form.Control  ref={lastnameRef} required />
                         </Form.Group>
                         <Form.Group id="password">
                             <Form.Label>Password</Form.Label>
