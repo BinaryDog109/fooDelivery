@@ -11,8 +11,11 @@ import { ItemGrid } from "../../components/ItemGrid";
 import { FoodItemModal } from "./FoodItemModal";
 import { useState } from "react";
 import { AddIcon } from "@chakra-ui/icons";
+import { useGetDocuments } from "../../hooks/useGetDocuments";
 
 export const FoodManagement = () => {
+  const {docs, error} = useGetDocuments("Food")
+  console.log(docs)
   const styles = {
     width: "85%",
     maxWidth: "960px",
