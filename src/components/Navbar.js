@@ -1,26 +1,34 @@
 import { Link } from "react-router-dom";
-import styles from "./Navbar.module.css";
 import { BellIcon, SettingsIcon } from "@chakra-ui/icons";
+import { Text, useBreakpointValue } from '@chakra-ui/react'
+
+import styles from "./Navbar.module.css";
+import { Box } from "@chakra-ui/react";
+import { MenuOpenButton } from "./MenuOpenButton";
 
 export const Navbar = () => {
   const iconSize = 8;
+  // TODO: Hamburger menu, useBreakpointValue
+  // true = (0, base, sm) false = (sm, md) false = (md, upwards)
+  const isSmallScreen = useBreakpointValue({base: true, sm:false, md: false})
   return (
-    <header className={styles.header}>
+    <Box boxShadow={"5px 5px"} className={styles.header}>
       <div className={styles.logo}>
         {/* logo image */}
-        <h2>D3l1ver00</h2>
+        <Text fontSize={["1.5rem", "2rem"]}>D3l1ver00 {isSmallScreen? "Small":"Large"}</Text>
         {/* <input type="text" /> */}
       </div>
       <nav className={styles.links}>
         
         <Link to={"/"}>
-          <BellIcon w={iconSize} h={iconSize} />
+          <MenuOpenButton Icon={BellIcon} />
+          
         </Link>
         <Link to={"/"}>
-          <SettingsIcon w={iconSize} h={iconSize} />
+        <MenuOpenButton Icon={SettingsIcon} />
         </Link>
         <div className="notification">{/* Icon */}</div>
       </nav>
-    </header>
+    </Box>
   );
 };

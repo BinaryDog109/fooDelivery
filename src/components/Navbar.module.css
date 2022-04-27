@@ -17,7 +17,7 @@
     align-items: center;
     /* outline: 1px solid black; */
     font-weight: 800;
-    font-size: 2rem;
+    /* font-size: 2rem; */
     flex-grow: 3;
 }
 .links {
