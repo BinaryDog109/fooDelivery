@@ -11,7 +11,18 @@ import {
 } from "@chakra-ui/react";
 import styles from "./FoodItemForm.module.css";
 
-export const FoodItemForm = () => {
+export const FoodItemForm = ({ setFoodInfo, foodInfo, data }) => {
+  console.log("food info:", foodInfo);
+  const handleChange = (event) => {
+    
+    if (typeof event === "string") {
+      setFoodInfo((prev) => ({ ...prev, price: event }));
+    } else {
+      const { id, value } = event.target;
+
+      setFoodInfo((prev) => ({ ...prev, [id]: value }));
+    }
+  };
   return (
     <>
       <Image
@@ -21,13 +32,19 @@ export const FoodItemForm = () => {
       <Flex justify={"space-between"}>
         <FormControl>
           <FormLabel htmlFor="name">Name</FormLabel>
-          <Input id="name" />
+          <Input id="name" onChange={handleChange} value={foodInfo.name} />
         </FormControl>
 
         <FormControl w={"50%"} ml={5}>
           <FormLabel htmlFor="price">Price</FormLabel>
-          <NumberInput min={0} precision={2}>
-            <NumberInputField id="price" />
+          <NumberInput
+            id="price"
+            onChange={handleChange}
+            min={0}
+            precision={2}
+            value={foodInfo.price}
+          >
+            <NumberInputField />
             {/* <NumberInputStepper>
                   <NumberIncrementStepper />
                   <NumberDecrementStepper />
@@ -39,7 +56,13 @@ export const FoodItemForm = () => {
         <Text fontWeight={400} mb="8px">
           Description:
         </Text>
-        <Textarea h={"120px"} placeholder="How good is this food? 😀" />
+        <Textarea
+          id="description"
+          onChange={handleChange}
+          value={foodInfo.description}
+          h={"120px"}
+          placeholder="How good is this food? 😀"
+        />
       </FormControl>
     </>
   );

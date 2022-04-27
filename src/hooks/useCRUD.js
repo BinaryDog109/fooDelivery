@@ -39,7 +39,7 @@ const storeReducer = (state, action) => {
       return state;
   }
 };
-export const useRestaurantAddDeleteUpdate = (collection, id, subCollection) => {
+export const useCRUD = (collection, id, subCollection) => {
   const [response, dispatch] = useReducer(storeReducer, initState);
   const [hasAborted, setHasAborted] = useState(false);
   // collection ref
@@ -55,17 +55,6 @@ export const useRestaurantAddDeleteUpdate = (collection, id, subCollection) => {
     if (!hasAborted) dispatch(action);
   };
 
-  // const addDocumentCollection = async (docId, subCollection) => {
-  //   const subRef = ref.doc(docId).collection(subCollection);
-  //   dispatchIfNotAborted({type: "PENDING"})
-  //   try {
-  //     const createdAt = timestamp.fromDate(new Date());
-  //     const addedDocument = await subRef.add({ ...doc, createdAt });
-  //     dispatchIfNotAborted({ type: "ADDED_DOCUMENT", payload: addedDocument });
-  //   } catch (error) {
-  //     dispatchIfNotAborted({ type: "ERROR" });
-  //   }
-  // };
 
   const addDoc = async (doc) => {
     dispatchIfNotAborted({ type: "PENDING" });
@@ -75,7 +64,7 @@ export const useRestaurantAddDeleteUpdate = (collection, id, subCollection) => {
       console.log(addedDocument);
       dispatchIfNotAborted({ type: "ADDED_DOCUMENT", payload: addedDocument });
     } catch (error) {
-      dispatchIfNotAborted({ type: "ERROR" });
+      dispatchIfNotAborted({ type: "ERROR", payload: error.message });
     }
   };
   // delete a document
@@ -101,17 +90,7 @@ export const useRestaurantAddDeleteUpdate = (collection, id, subCollection) => {
 
     }
   }
-  // delete a document's subCollection
-  // const deleteDocumentCollection = async (id, subCollection) => {
-  //   dispatch({ type: "IS_PENDING" });
-  //   const subRef = ref.doc(id).collection(subCollection);
-  //   try {
-  //     await subRef.doc(id).delete();
-  //     dispatchIfNotAborted({ type: "DELETED_DOCUMENT" });
-  //   } catch (err) {
-  //     dispatchIfNotAborted({ type: "ERROR", payload: "could not delete" });
-  //   }
-  // };
+
   const updateDoc = async (id, data) => {
     dispatchIfNotAborted({ type: "PENDING" });
     try {

@@ -1,23 +1,29 @@
 import { Button } from "@chakra-ui/react";
 import { FoodItemForm } from "./FoodItemForm";
 import { HighModal } from "../../components/HighModal";
-import { useRestaurantAddDeleteUpdate } from "../../hooks/useRestaurantAddDeleteUpdate";
+import { useCRUD } from "../../hooks/useCRUD";
+import { useUserContext } from "../../hooks/useUserContext";
+import { useState } from "react";
 
 // Wraps a HighModal and inserts a FoodItemForm
-export const FoodItemModal = ({ isOpen, onClose, onOpen }) => {
-
-  const id = "Mbsj4jfzNKIfoT2KKPPJ"
-  const {addDoc, deleteDoc, updateDoc, getDoc} = 
-  useRestaurantAddDeleteUpdate("Restaurants", id, "Food")
-  
-  const handleClick = () => {
-    const data = {
-      description: 'StarBug',
-      name: 'baobao',
-      price: "79.99"
+export const FoodItemModal = ({ data, isOpen, onClose, onOpen }) => {
+  const { userId } = useUserContext();
+  const { addDoc, updateDoc } = useCRUD("Restaurants", userId, "Food");
+  const handleSubmit = (foodId) => {
+    if (!foodId) {
+      addDoc();
     }
-    getDoc("MtofPnkfLV2jNTi2pPFH")
-  }
+  };
+  const [foodInfo, setFoodInfo] = useState(
+    data
+      ? { ...data }
+      : {
+          name: "",
+          price: "",
+          description: "",
+        }
+  );
+        if (!data) console.log(foodInfo)
   return (
     <>
       <HighModal
@@ -31,14 +37,16 @@ export const FoodItemModal = ({ isOpen, onClose, onOpen }) => {
             >
               Close
             </Button>
-            <Button onClick={()=>handleClick()} colorScheme="green">Submit</Button>
+            <Button onClick={() => handleSubmit()} colorScheme="green">
+              Submit
+            </Button>
           </>
         }
         isOpen={isOpen}
         onOpen={onOpen}
         onClose={onClose}
       >
-        <FoodItemForm />
+        <FoodItemForm setFoodInfo={setFoodInfo} foodInfo={foodInfo} />
       </HighModal>
     </>
   );

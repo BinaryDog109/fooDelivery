@@ -1,14 +1,14 @@
-import { Box, Image, Badge, useDisclosure } from "@chakra-ui/react";
+import { Box, Image, Badge, useDisclosure, Text } from "@chakra-ui/react";
 import styles from "./Card.module.css";
 import { FoodItemModal } from "../page/FoodManagement/FoodItemModal";
 
-export const Card = ({ title, desc }) => {
+export const Card = ({ data }) => {
   // Toggle the Modal
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <div className={styles["food-card"]}>
-      <FoodItemModal isOpen={isOpen} onClose={onClose} onOpen={onOpen} />
+      <FoodItemModal data={data} isOpen={isOpen} onClose={onClose} onOpen={onOpen} />
 
       <Box
         onClick={onOpen}
@@ -43,7 +43,7 @@ export const Card = ({ title, desc }) => {
               textTransform="uppercase"
               ml="2"
             >
-              {5} beds &bull; {5} baths
+              Allergen: Unavailable
             </Box>
           </Box>
 
@@ -53,16 +53,18 @@ export const Card = ({ title, desc }) => {
             as="h4"
             lineHeight="tight"
             isTruncated
+            color={"black"}
           >
-            lorem
+            {data.name}
           </Box>
 
           <Box>
-            {"5.5"}
-            <Box as="span" color="gray.600" fontSize="sm">
-              / mth
-            </Box>
+            <Text color={"gray"} noOfLines={7}>{data.description}</Text>
           </Box>
+          <Box as="span" color="black" fontSize="lg">
+          £{data.price}
+          </Box>
+          {/* <p>{data.id}</p> */}
         </Box>
       </Box>
     </div>

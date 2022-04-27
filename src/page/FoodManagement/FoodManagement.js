@@ -12,9 +12,13 @@ import { FoodItemModal } from "./FoodItemModal";
 import { useState } from "react";
 import { AddIcon } from "@chakra-ui/icons";
 import { useGetDocuments } from "../../hooks/useGetDocuments";
+import { useUserContext } from "../../hooks/useUserContext";
 
 export const FoodManagement = () => {
-  const {docs, error} = useGetDocuments("Food")
+  const { id } = useUserContext();
+  
+  const { docs, error } = useGetDocuments("Restaurants", id, "Food");
+  
   console.log(docs)
   const styles = {
     width: "85%",
@@ -28,6 +32,8 @@ export const FoodManagement = () => {
 
   return (
     <div className="food-container" style={styles}>
+      {error && <p>error.message</p>}
+
       <FoodItemModal isOpen={isOpen} onClose={onClose} onOpen={onOpen} />
       <Tabs
         onChange={(i) => (i === 0 ? setOnFoodTab(true) : setOnFoodTab(false))}
@@ -60,10 +66,10 @@ export const FoodManagement = () => {
         </TabList>
         <TabPanels mb={yOffset}>
           <TabPanel p={0}>
-            <ItemGrid cardNum={5} />
+            {docs && <ItemGrid data={docs} cardNum={5} />}
           </TabPanel>
           <TabPanel p={0}>
-            <ItemGrid />
+            {/* <ItemGrid /> */}
           </TabPanel>
         </TabPanels>
       </Tabs>

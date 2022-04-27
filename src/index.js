@@ -7,11 +7,14 @@ import { ChakraProvider } from "@chakra-ui/react";
 import App from "./App";
 
 import { BrowserRouter } from "react-router-dom";
+import { UserContextProvider } from "./context/UserContext";
 
 ReactDOM.render(
   <BrowserRouter>
     <ChakraProvider theme={theme}>
-      <App />
+      <UserContextProvider>
+        <App />
+      </UserContextProvider>
     </ChakraProvider>
   </BrowserRouter>,
   document.getElementById("root")

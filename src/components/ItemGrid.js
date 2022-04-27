@@ -1,7 +1,7 @@
 import { SimpleGrid } from "@chakra-ui/react"
 import { Card } from "./Card"
 
-export const ItemGrid = ({cardNum = 10}) => {
+export const ItemGrid = ({data}) => {
   return (
     <SimpleGrid
         columns={{ sm: 2, md: 3 }}
@@ -12,8 +12,8 @@ export const ItemGrid = ({cardNum = 10}) => {
         rounded="lg"
         color="gray.400"       
       >
-        {[...Array(cardNum).keys()].map((elem, index)=>(
-            <Card key={index} />
+        {data.map((elem, index)=>(
+            <Card data={elem} key={index} />
         ))}
       </SimpleGrid>
   )
