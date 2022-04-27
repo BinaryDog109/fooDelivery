@@ -6,7 +6,9 @@ import { useRestaurantAddDeleteUpdate } from "../../hooks/useRestaurantAddDelete
 // Wraps a HighModal and inserts a FoodItemForm
 export const FoodItemModal = ({ isOpen, onClose, onOpen }) => {
 
-  const {addDoc, deleteDoc, updateDoc} = useRestaurantAddDeleteUpdate("Food")
+  const id = "Mbsj4jfzNKIfoT2KKPPJ"
+  const {addDoc, deleteDoc, updateDoc, getDoc} = 
+  useRestaurantAddDeleteUpdate("Restaurants", id, "Food")
   
   const handleClick = () => {
     const data = {
@@ -14,7 +16,7 @@ export const FoodItemModal = ({ isOpen, onClose, onOpen }) => {
       name: 'baobao',
       price: "79.99"
     }
-    addDoc(data)
+    getDoc("MtofPnkfLV2jNTi2pPFH")
   }
   return (
     <>

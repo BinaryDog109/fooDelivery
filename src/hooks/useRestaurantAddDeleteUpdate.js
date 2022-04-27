@@ -39,15 +39,17 @@ const storeReducer = (state, action) => {
       return state;
   }
 };
-export const useRestaurantAddDeleteUpdate = (collection) => {
+export const useRestaurantAddDeleteUpdate = (collection, id, subCollection) => {
   const [response, dispatch] = useReducer(storeReducer, initState);
   const [hasAborted, setHasAborted] = useState(false);
   // collection ref
-  const id = "Mbsj4jfzNKIfoT2KKPPJ";
-  const ref = projectFirestore
-    .collection("Restaurants")
+  let ref = projectFirestore
+    .collection(collection)
+  if (id && subCollection) {
+    ref = ref
     .doc(id)
-    .collection(collection);
+    .collection(subCollection);
+  }  
 
   const dispatchIfNotAborted = (action) => {
     if (!hasAborted) dispatch(action);
@@ -68,10 +70,8 @@ export const useRestaurantAddDeleteUpdate = (collection) => {
   const addDoc = async (doc) => {
     dispatchIfNotAborted({ type: "PENDING" });
     try {
-      const createdAt = timestamp.fromDate(new Date());
-      const promise = ref.add({ ...doc, createdAt })
-      console.log(promise)
-      const addedDocument = await promise;
+      const createdAt = timestamp.fromDate(new Date());      
+      const addedDocument = await ref.add({ ...doc, createdAt });
       console.log(addedDocument);
       dispatchIfNotAborted({ type: "ADDED_DOCUMENT", payload: addedDocument });
     } catch (error) {
@@ -86,25 +86,36 @@ export const useRestaurantAddDeleteUpdate = (collection) => {
       await ref.doc(id).delete();
       dispatchIfNotAborted({ type: "DELETED_DOCUMENT" });
     } catch (err) {
-      dispatchIfNotAborted({ type: "ERROR", payload: "could not delete" });
+      dispatchIfNotAborted({ type: "ERROR", payload: err.message });
     }
   };
-  // delete a document's subCollection
-  const deleteDocumentCollection = async (id, subCollection) => {
-    dispatch({ type: "IS_PENDING" });
-    const subRef = ref.doc(id).collection(subCollection);
+  const getDoc = async(id) => {
+    dispatch({ type: "PENDING" });
+    
+    const theDoc = await ref.doc(id).get()
+    console.log(theDoc.data())
     try {
-      await subRef.doc(id).delete();
-      dispatchIfNotAborted({ type: "DELETED_DOCUMENT" });
+      
     } catch (err) {
-      dispatchIfNotAborted({ type: "ERROR", payload: "could not delete" });
+      dispatchIfNotAborted({ type: "ERROR", payload: err.message });
+
     }
-  };
+  }
+  // delete a document's subCollection
+  // const deleteDocumentCollection = async (id, subCollection) => {
+  //   dispatch({ type: "IS_PENDING" });
+  //   const subRef = ref.doc(id).collection(subCollection);
+  //   try {
+  //     await subRef.doc(id).delete();
+  //     dispatchIfNotAborted({ type: "DELETED_DOCUMENT" });
+  //   } catch (err) {
+  //     dispatchIfNotAborted({ type: "ERROR", payload: "could not delete" });
+  //   }
+  // };
   const updateDoc = async (id, data) => {
     dispatchIfNotAborted({ type: "PENDING" });
     try {
       const doc = await ref.doc(id).update(data);
-      console.log("updated,", doc);
       dispatchIfNotAborted({type: "UPDATED_DOCUMENT", payload: doc})
     } catch (error) {
       dispatchIfNotAborted({ type: "ERROR" });
@@ -113,5 +124,5 @@ export const useRestaurantAddDeleteUpdate = (collection) => {
   useEffect(() => {
     return () => setHasAborted(true);
   }, []);
-  return { response, addDoc, deleteDoc, updateDoc };
+  return { response, addDoc, deleteDoc, updateDoc, getDoc };
 };
