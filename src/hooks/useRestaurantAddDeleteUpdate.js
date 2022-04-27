@@ -89,17 +89,6 @@ export const useRestaurantAddDeleteUpdate = (collection) => {
       dispatchIfNotAborted({ type: "ERROR", payload: "could not delete" });
     }
   };
-  // delete a document's subCollection
-  const deleteDocumentCollection = async (id, subCollection) => {
-    dispatch({ type: "IS_PENDING" });
-    const subRef = ref.doc(id).collection(subCollection);
-    try {
-      await subRef.doc(id).delete();
-      dispatchIfNotAborted({ type: "DELETED_DOCUMENT" });
-    } catch (err) {
-      dispatchIfNotAborted({ type: "ERROR", payload: "could not delete" });
-    }
-  };
   const updateDoc = async (id, data) => {
     dispatchIfNotAborted({ type: "PENDING" });
     try {
