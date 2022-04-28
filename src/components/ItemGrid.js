@@ -9,13 +9,12 @@ export const ItemGrid = ({ data, Card }) => {
         columns={{ sm: 2, md: 3 }}
         spacing="8"
         p="0"
-        pt="5"
         textAlign="center"
         rounded="lg"
         color="gray.400"
       >
         {data.map((elem, index) => (
-          <Card data={elem} key={index} />
+          <Card data={elem} key={elem.id} />
         ))}
       </SimpleGrid>
     ),

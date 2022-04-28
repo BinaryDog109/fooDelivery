@@ -6,6 +6,8 @@ import {
   TabPanel,
   TabPanels,
   useDisclosure,
+  Box,
+  Container,
 } from "@chakra-ui/react";
 import { ItemGrid } from "../../components/ItemGrid";
 import { FoodItemModal } from "./FoodItemModal";
@@ -14,12 +16,17 @@ import { AddIcon } from "@chakra-ui/icons";
 import { useGetDocuments } from "../../hooks/useGetDocuments";
 import { useUserContext } from "../../hooks/useUserContext";
 import { Card } from "../../components/Card";
+import { ListAccordion } from "../../components/ListAccordion";
 
 export const FoodManagement = () => {
-  const { id } = useUserContext();
-
+  const { id } = useUserContext();  
   const { docs, error } = useGetDocuments("Restaurants", id, "Food");
-
+  const { docs: orders, error: orderError } = useGetDocuments("Orders", null, null, [
+    "restaurantId",
+    "==",
+    id
+  ]);
+  console.log(orders)
   const styles = useMemo(
     () => ({
       width: "85%",
@@ -36,7 +43,6 @@ export const FoodManagement = () => {
 
   // Optimise with useMemo
   return useMemo(() => {
-    
     return (
       <div className="food-container" style={styles}>
         {error && <p>{error.message}</p>}
@@ -48,7 +54,7 @@ export const FoodManagement = () => {
           colorScheme="yellow"
         >
           <TabList
-          zIndex={2}
+            zIndex={2}
             boxShadow={"dark-lg"}
             borderRadius={"sm"}
             p={2}
@@ -72,9 +78,13 @@ export const FoodManagement = () => {
               </Button>
             ) : null}
           </TabList>
-          <TabPanels mb={yOffset}>
-            <TabPanel p={0}>{docs && <ItemGrid data={docs} Card={Card} />}</TabPanel>
-            <TabPanel p={0}>{/* <ItemGrid /> */}</TabPanel>
+          <TabPanels pt={5} mb={yOffset}>
+            <TabPanel p={0}>
+              {docs && <ItemGrid data={docs} Card={Card} />}
+            </TabPanel>
+            <TabPanel p={0}>            
+                {orders && <ListAccordion data={orders} />}
+            </TabPanel>
           </TabPanels>
         </Tabs>
       </div>

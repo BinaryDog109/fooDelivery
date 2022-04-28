@@ -80,7 +80,7 @@ export const Card = ({ data }) => {
         }}
         shadow={"md"}
         bg={"gray.50"}
-        maxW="sm"
+        
         borderWidth="1px"
         borderRadius="lg"
         overflow="hidden"
@@ -128,7 +128,7 @@ export const Card = ({ data }) => {
             fontWeight="semibold"
             as="h4"
             lineHeight="tight"
-            isTruncated
+            noOfLines={1}
             color={"black"}
           >
             {data.name}
