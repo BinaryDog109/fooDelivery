@@ -47,6 +47,7 @@ export const FoodManagement = () => {
           colorScheme="yellow"
         >
           <TabList
+          zIndex={2}
             boxShadow={"dark-lg"}
             borderRadius={"sm"}
             p={2}

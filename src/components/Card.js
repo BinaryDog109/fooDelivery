@@ -17,7 +17,7 @@ import { OperationAlertDialog } from "./OperationAlertDialog";
 
 export const Card = ({ data }) => {
   // Toggle the Modal
-  
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isDeleteDialogOpen,
@@ -25,14 +25,13 @@ export const Card = ({ data }) => {
     onClose: onDeleteDialogClose,
   } = useDisclosure();
   const cancelRef = useRef();
-  
+
   const { id } = useUserContext();
   const { deleteDoc, response } = useCRUD("Restaurants", id, "Food");
   const toast = useToast();
   const handleDelete = (foodId) => {
-    deleteDoc(foodId);    
+    deleteDoc(foodId);
   };
-  console.log(response.success)
   useEffect(() => {
     if (response.success) {
       toast({
@@ -41,7 +40,7 @@ export const Card = ({ data }) => {
         duration: 3000,
         isClosable: true,
       });
-      onDeleteDialogClose()
+      onDeleteDialogClose();
     }
   }, [response.success, toast, onDeleteDialogClose]);
 
@@ -62,7 +61,13 @@ export const Card = ({ data }) => {
         <Button ref={cancelRef} onClick={onDeleteDialogClose}>
           Cancel
         </Button>
-        <Button colorScheme="red" onClick={()=>{handleDelete(data.id)}} ml={3}>
+        <Button
+          colorScheme="red"
+          onClick={() => {
+            handleDelete(data.id);
+          }}
+          ml={3}
+        >
           Delete
         </Button>
       </OperationAlertDialog>
@@ -80,26 +85,27 @@ export const Card = ({ data }) => {
         borderRadius="lg"
         overflow="hidden"
         height={500}
-        pos="relative"
       >
-        <CloseButton
-          className="deleteButton"
-          onClick={onDeleteDialogOpen}
-          color={"gray"}
-          size={"lg"}
-          pos={"absolute"}
-          right={0}
-        />
-        <Image
-          height={200}
-          width={"100%"}
-          objectFit="cover"
-          objectPosition={"center"}
-          src={
-            "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=999&q=80"
-          }
-          alt={"A Food Photo"}
-        />
+        <Box pos={"relative"}>
+          <CloseButton
+            className="deleteButton"
+            onClick={onDeleteDialogOpen}
+            color={"gray"}
+            size={"lg"}
+            pos="absolute"
+            right={0}
+          />
+          <Image
+            height={200}
+            width={"100%"}
+            objectFit="cover"
+            objectPosition={"center"}
+            src={
+              "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=999&q=80"
+            }
+            alt={"A Food Photo"}
+          />
+        </Box>
         <Box p="6">
           <Box display="flex" alignItems="baseline">
             <Badge borderRadius="full" px="2" colorScheme="teal">
