@@ -29,12 +29,14 @@ export const FoodManagement = () => {
   );
   const [onFoodTab, setOnFoodTab] = useState(true);
   const { isOpen, onOpen, onClose } = useDisclosure();
+
   const tabListTextColor = "gray.500";
   const yOffset = 5;
 
-  // Optimise with useMemo, this JSX will only renders twice
-  return useMemo(
-    () => (
+  // Optimise with useMemo
+  return useMemo(() => {
+    
+    return (
       <div className="food-container" style={styles}>
         {error && <p>{error.message}</p>}
 
@@ -69,14 +71,11 @@ export const FoodManagement = () => {
             ) : null}
           </TabList>
           <TabPanels mb={yOffset}>
-            <TabPanel p={0}>
-              {docs && <ItemGrid data={docs} />}
-            </TabPanel>
+            <TabPanel p={0}>{docs && <ItemGrid data={docs} />}</TabPanel>
             <TabPanel p={0}>{/* <ItemGrid /> */}</TabPanel>
           </TabPanels>
         </Tabs>
       </div>
-    ),
-    [docs, error, onOpen, onClose, isOpen, onFoodTab, styles]
-  );
+    );
+  }, [docs, error, onOpen, onClose, isOpen, onFoodTab, styles]);
 };

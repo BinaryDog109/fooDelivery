@@ -21,7 +21,6 @@ export const FoodItemModal = ({ data, isOpen, onClose, onOpen }) => {
   const [foodInfo, setFoodInfo] = useState(
     data ? { ...data } : { ...initFoodInfo }
   );
-  console.log(response.error)
   // Handles the operations' response: resets the form if success, displays a toast
   useEffect(() => {
     if (response.success === "added") {

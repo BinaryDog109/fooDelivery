@@ -32,7 +32,12 @@ const storeReducer = (state, action) => {
         error: null,
       };
     case "DELETED_DOCUMENT":
-      return { isPending: false, document: null, success: "deleted", error: null };
+      return {
+        isPending: false,
+        document: null,
+        success: "deleted",
+        error: null,
+      };
     case "ERROR":
       return {
         isPending: false,
@@ -49,23 +54,19 @@ export const useCRUD = (collection, id, subCollection) => {
   const [response, dispatch] = useReducer(storeReducer, initState);
   const [hasAborted, setHasAborted] = useState(false);
   // collection ref
-  let ref = projectFirestore
-    .collection(collection)
+  let ref = projectFirestore.collection(collection);
   if (id && subCollection) {
-    ref = ref
-    .doc(id)
-    .collection(subCollection);
-  }  
+    ref = ref.doc(id).collection(subCollection);
+  }
 
   const dispatchIfNotAborted = (action) => {
     if (!hasAborted) dispatch(action);
   };
 
-
   const addDoc = async (doc) => {
     dispatchIfNotAborted({ type: "PENDING" });
     try {
-      const createdAt = timestamp.fromDate(new Date());      
+      const createdAt = timestamp.fromDate(new Date());
       const addedDocument = await ref.add({ ...doc, createdAt });
       console.log("Added document", addedDocument);
       dispatchIfNotAborted({ type: "ADDED_DOCUMENT", payload: addedDocument });
@@ -84,25 +85,23 @@ export const useCRUD = (collection, id, subCollection) => {
       dispatchIfNotAborted({ type: "ERROR", payload: err.message });
     }
   };
-  const getDoc = async(id) => {
+  const getDoc = async (id) => {
     dispatch({ type: "PENDING" });
-    
-    const theDoc = await ref.doc(id).get()
-    console.log(theDoc.data())
+
+    const theDoc = await ref.doc(id).get();
+    console.log(theDoc.data());
     try {
-      
     } catch (err) {
       dispatchIfNotAborted({ type: "ERROR", payload: err.message });
-
     }
-  }
+  };
 
   const updateDoc = async (id, data) => {
     dispatchIfNotAborted({ type: "PENDING" });
     const updatedAt = timestamp.fromDate(new Date());
     try {
-      const doc = await ref.doc(id).update({...data, updatedAt});
-      dispatchIfNotAborted({type: "UPDATED_DOCUMENT", payload: doc})
+      const doc = await ref.doc(id).update({ ...data, updatedAt });
+      dispatchIfNotAborted({ type: "UPDATED_DOCUMENT", payload: doc });
     } catch (error) {
       dispatchIfNotAborted({ type: "ERROR", payload: error.message });
     }
