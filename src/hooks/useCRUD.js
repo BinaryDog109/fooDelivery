@@ -21,18 +21,18 @@ const storeReducer = (state, action) => {
       return {
         isPending: false,
         document: action.payload,
-        success: true,
+        success: "added",
         error: null,
       };
     case "UPDATED_DOCUMENT":
       return {
         isPending: false,
         document: action.payload,
-        success: true,
+        success: "updated",
         error: null,
       };
     case "DELETED_DOCUMENT":
-      return { isPending: false, document: null, success: true, error: null };
+      return { isPending: false, document: null, success: "deleted", error: null };
     case "ERROR":
       return {
         isPending: false,
@@ -67,7 +67,7 @@ export const useCRUD = (collection, id, subCollection) => {
     try {
       const createdAt = timestamp.fromDate(new Date());      
       const addedDocument = await ref.add({ ...doc, createdAt });
-      console.log(addedDocument);
+      console.log("Added document", addedDocument);
       dispatchIfNotAborted({ type: "ADDED_DOCUMENT", payload: addedDocument });
     } catch (error) {
       dispatchIfNotAborted({ type: "ERROR", payload: error.message });
@@ -99,11 +99,12 @@ export const useCRUD = (collection, id, subCollection) => {
 
   const updateDoc = async (id, data) => {
     dispatchIfNotAborted({ type: "PENDING" });
+    const updatedAt = timestamp.fromDate(new Date());
     try {
-      const doc = await ref.doc(id).update(data);
+      const doc = await ref.doc(id).update({...data, updatedAt});
       dispatchIfNotAborted({type: "UPDATED_DOCUMENT", payload: doc})
     } catch (error) {
-      dispatchIfNotAborted({ type: "ERROR" });
+      dispatchIfNotAborted({ type: "ERROR", payload: error.message });
     }
   };
   useEffect(() => {
