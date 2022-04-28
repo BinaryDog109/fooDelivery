@@ -1,8 +1,7 @@
 import { SimpleGrid } from "@chakra-ui/react";
 import { useMemo } from "react";
-import { Card } from "./Card";
 
-export const ItemGrid = ({ data }) => {
+export const ItemGrid = ({ data, Card }) => {
   // Optimise using useMemo so that it wont rerender again after clicking the Add button
   return useMemo(
     () => (

@@ -13,6 +13,7 @@ import { useMemo, useState } from "react";
 import { AddIcon } from "@chakra-ui/icons";
 import { useGetDocuments } from "../../hooks/useGetDocuments";
 import { useUserContext } from "../../hooks/useUserContext";
+import { Card } from "../../components/Card";
 
 export const FoodManagement = () => {
   const { id } = useUserContext();
@@ -72,7 +73,7 @@ export const FoodManagement = () => {
             ) : null}
           </TabList>
           <TabPanels mb={yOffset}>
-            <TabPanel p={0}>{docs && <ItemGrid data={docs} />}</TabPanel>
+            <TabPanel p={0}>{docs && <ItemGrid data={docs} Card={Card} />}</TabPanel>
             <TabPanel p={0}>{/* <ItemGrid /> */}</TabPanel>
           </TabPanels>
         </Tabs>

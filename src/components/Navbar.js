@@ -12,7 +12,7 @@ export const Navbar = () => {
   // true = (0, base, sm) false = (sm, md) false = (md, upwards)
   // const isSmallScreen = useBreakpointValue({base: true, sm:false, md: false})
   return (
-    <Box boxShadow={"5px 5px"} className={styles.header}>
+    <Box pos={"relative"} zIndex={3} boxShadow={"5px 5px"} className={styles.header}>
       <div className={styles.logo}>
         {/* logo image */}
         <Text fontSize={["1.5rem", "2rem"]}>D3l1ver00 </Text>
