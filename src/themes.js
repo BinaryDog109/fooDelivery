@@ -31,7 +31,7 @@ const theme = extendTheme({
         background: `linear-gradient(to right, 
           ${myColorPalletes.band1[100]} , 
           ${myColorPalletes.band2[600]} );`,
-
+          scrollBehavior: "smooth"
       },
       // styles for the `body`
       body: {

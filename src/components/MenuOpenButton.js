@@ -1,6 +1,12 @@
-import { IconButton, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
+import {
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+} from "@chakra-ui/react";
 
-export const MenuOpenButton = ({Icon}) => {
+export const MenuOpenButton = ({ Icon, data }) => {
   return (
     <Menu>
       <MenuButton
@@ -11,19 +17,20 @@ export const MenuOpenButton = ({Icon}) => {
         variant="outline"
       />
       <MenuList>
-          {/* Optional: icon={<IconName />} command="⌘T" */}
-        <MenuItem >
-          New Tab
-        </MenuItem>
-        <MenuItem>
-          New Window
-        </MenuItem>
-        <MenuItem>
-          Open Closed Tab
-        </MenuItem>
-        <MenuItem>
-          Open File...
-        </MenuItem>
+        {/* Optional: icon={<IconName />} command="⌘T" */}
+        {data &&
+          data.map((elem, index) => (
+            <MenuItem
+            key={elem.id}
+              onClick={() => {
+                window.location.href =
+                  `#${elem.id}`;
+             }}
+              
+            >
+              Paid Order No.{index + 1}
+            </MenuItem>
+          ))}
       </MenuList>
     </Menu>
   );

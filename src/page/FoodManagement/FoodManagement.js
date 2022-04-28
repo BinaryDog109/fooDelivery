@@ -6,8 +6,7 @@ import {
   TabPanel,
   TabPanels,
   useDisclosure,
-  Box,
-  Container,
+
 } from "@chakra-ui/react";
 import { ItemGrid } from "../../components/ItemGrid";
 import { FoodItemModal } from "./FoodItemModal";
@@ -19,13 +18,9 @@ import { Card } from "../../components/Card";
 import { ListAccordion } from "../../components/ListAccordion";
 
 export const FoodManagement = () => {
-  const { id } = useUserContext();  
+  const { id, orders, orderError } = useUserContext();  
   const { docs, error } = useGetDocuments("Restaurants", id, "Food");
-  const { docs: orders, error: orderError } = useGetDocuments("Orders", null, null, [
-    "restaurantId",
-    "==",
-    id
-  ]);
+  
   console.log(orders)
   const styles = useMemo(
     () => ({
@@ -46,6 +41,7 @@ export const FoodManagement = () => {
     return (
       <div className="food-container" style={styles}>
         {error && <p>{error.message}</p>}
+        {orderError && <p>{orderError.message}</p>}
 
         <FoodItemModal isOpen={isOpen} onClose={onClose} onOpen={onOpen} />
         <Tabs
@@ -89,5 +85,5 @@ export const FoodManagement = () => {
         </Tabs>
       </div>
     );
-  }, [docs, error, onOpen, onClose, isOpen, onFoodTab, styles]);
+  }, [docs, error, onOpen, onClose, isOpen, onFoodTab, styles, orders, orderError]);
 };
