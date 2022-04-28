@@ -1,6 +1,12 @@
 import { useReducer, useEffect, useState } from "react";
 import { projectFirestore, timestamp } from "../firebase/config";
 
+// A general-purpose CRUD hook.
+// Usage:
+// const {response, addDoc, deleteDoc, updateDoc, getDoc} = useCRUD()
+// add/delete/update/getDoc are functions
+// The variable "response" is a set of state that represents the result of each CRUD operation
+// E.g, response.isPending can show if the add/delete/update/getDoc function is pending
 const initState = {
   document: null,
   isPending: false,

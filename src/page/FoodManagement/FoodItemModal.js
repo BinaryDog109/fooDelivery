@@ -23,7 +23,6 @@ export const FoodItemModal = ({ data, isOpen, onClose, onOpen }) => {
           description: "",
         }
   );
-        if (!data) console.log(foodInfo)
   return (
     <>
       <HighModal

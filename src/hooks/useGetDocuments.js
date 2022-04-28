@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import { projectFirestore } from "../firebase/config";
 
+// Get a collection or a sub-collection in a document
+// Usage:
+// useGetDocuments("Restaurants")
+// useGetDocuments("Restaurants", "<userId>", "Food")
 export const useGetDocuments = (collection, id, subCollection) => {
   const [error, setError] = useState(null);
   const [docs, setDocs] = useState(null);
@@ -23,7 +27,7 @@ export const useGetDocuments = (collection, id, subCollection) => {
     );
 
     return () => unsub();
-  }, [collection]);
+  }, [collection, id, subCollection]);
 
   return { docs, error };
 };

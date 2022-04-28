@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { ItemGrid } from "../../components/ItemGrid";
 import { FoodItemModal } from "./FoodItemModal";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { AddIcon } from "@chakra-ui/icons";
 import { useGetDocuments } from "../../hooks/useGetDocuments";
 import { useUserContext } from "../../hooks/useUserContext";
@@ -19,20 +19,20 @@ export const FoodManagement = () => {
   
   const { docs, error } = useGetDocuments("Restaurants", id, "Food");
   
-  console.log(docs)
-  const styles = {
+  const styles = useMemo(()=>({
     width: "85%",
     maxWidth: "960px",
     margin: "0 auto",
-  };
+  }), []);
   const [onFoodTab, setOnFoodTab] = useState(true);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const tabListTextColor = "grey.500";
   const yOffset = 5;
 
-  return (
+  // Optimise with useMemo
+  return useMemo(() => (
     <div className="food-container" style={styles}>
-      {error && <p>error.message</p>}
+      {error && <p>{error.message}</p>}
 
       <FoodItemModal isOpen={isOpen} onClose={onClose} onOpen={onOpen} />
       <Tabs
@@ -74,5 +74,5 @@ export const FoodManagement = () => {
         </TabPanels>
       </Tabs>
     </div>
-  );
+  ), [docs, error, onOpen, onClose, isOpen, onFoodTab, styles]);
 };
