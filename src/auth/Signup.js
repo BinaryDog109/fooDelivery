@@ -1,10 +1,12 @@
 import React, { useRef, useState } from "react"
-import { Form, Button, Card, Alert } from "react-bootstrap"
+import {Form, Button, Card, Alert, Image} from "react-bootstrap"
 import 'bootstrap/dist/css/bootstrap.css';
 import { useAuth } from "./AuthContext"
 import { Link, useNavigate  } from "react-router-dom"
 import { db } from "../firebase/firebase"
 import "firebase/storage";
+import {storage} from "../firebase/firebase";
+import empty_portrait from "../images/portrait.png"
 
 export default function Signup() {
     const emailRef = useRef()
@@ -16,6 +18,32 @@ export default function Signup() {
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate ()
+
+    // store image to storage **************************************
+    const [image, setImage] = useState(null);
+    const [url, setUrl] = useState("");
+    const [progress, setProgress] = useState(0);
+    const handleChange = e =>{
+        if (e.target.files[0]){
+            setImage(e.target.files[0]);
+        }
+    }
+    const handleUpload = () => {
+      const uploadTask = storage.ref(`test/${image.name}`).put(image);
+      uploadTask.on(
+          "state_changed",
+          snapshot => {const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes)*100);
+              setProgress(progress);},
+          error => {console.log(error);},
+          () => {storage.ref("test").child(image.name).getDownloadURL().then(url=>{
+              // console.log(url)
+              setUrl(url);
+          });}
+      );
+    };
+
+    console.log("image:", image)
+    // **************************************************************
 
     async function handleSubmit(e) {
         e.preventDefault()
@@ -56,6 +84,12 @@ export default function Signup() {
                 <Card.Body>
                     <h2 className="text-center mb-4">Sign Up</h2>
                     {error && <Alert variant="danger">{error}</Alert>}
+                    {/*image**************************************** */}
+                    <progress value={progress} max={100}/>
+                    <input type= "file" onChange={handleChange} />
+                    <Image src={url || empty_portrait} alt="image" style={{ maxWidth: '150px' }}/>
+                    <Button className={"w-100 text-center mt-2 mb-2"} onClick={handleUpload}>Upload Portrait</Button>
+                    {/*image**************************************** */}
                     <Form onSubmit={handleSubmit}>
                         <Form.Group id="email">
                             <Form.Label>Email</Form.Label>
