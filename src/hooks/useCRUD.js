@@ -96,8 +96,9 @@ export const useCRUD = (collection, id, subCollection) => {
   };
   const _getDoc = async (id) => {
     dispatch({ type: "PENDING" });
-    const theDoc = await ref.doc(id).get();
-    dispatchIfNotAborted({type: "GOT_DOCUMENT", payload: {...theDoc.data()}})
+    const theDoc = await ref.doc(id).onSnapshot(docSnapshot => {
+      dispatchIfNotAborted({type: "GOT_DOCUMENT", payload: {...docSnapshot.data()}})
+    });
     try {
     } catch (err) {
       dispatchIfNotAborted({ type: "ERROR", payload: err.message });

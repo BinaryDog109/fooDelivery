@@ -17,9 +17,13 @@ import { Link } from "react-router-dom";
 import { Route } from "react-router-dom";
 import { Switch } from "react-router-dom";
 import { RestaurantCard } from "./RestaurantCard";
-import { ShoppingCartButton } from "./ShoppingCartButton";
+import { CartPopup } from "./CartPopup";
+import { useUserContext } from "../../hooks/useUserContext";
 
 export const CustomerPage = ({ basePath = "/" }) => {
+  const context = useUserContext();
+  console.log(context);
+  const cart = context.cart;
   console.log(basePath);
   const styles = useMemo(
     () => ({
@@ -34,7 +38,7 @@ export const CustomerPage = ({ basePath = "/" }) => {
   return (
     <>
       <Navbar>
-        <ShoppingCartButton></ShoppingCartButton>
+        <CartPopup cart={cart}/>
       </Navbar>
       <Container style={styles} mt={5} borderRadius="md" boxShadow={"xl"}>
         <Route exact path={"/cus"}>
@@ -46,7 +50,7 @@ export const CustomerPage = ({ basePath = "/" }) => {
                     <Box flexShrink={0}>
                       <Image
                         borderRadius="lg"
-                        width={{ base: 40, md: 40 }}
+                        width={{ md: 40 }}
                         src="https://bit.ly/2jYM25F"
                         alt="Woman paying for a purchase"
                       />
