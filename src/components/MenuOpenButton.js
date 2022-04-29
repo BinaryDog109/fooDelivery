@@ -9,14 +9,14 @@ import {
 export const MenuOpenButton = ({ Icon, data, handleSelect }) => {
   return (
     <Menu>
-      <MenuButton
+      <MenuButton      
         rounded={"full"}
         as={IconButton}
         border="0px"
         icon={<Icon w={8} h={8} />}
         variant="outline"
       />
-      <MenuList>
+      <MenuList minW={4}>
         {/* Optional: icon={<IconName />} command="⌘T" */}
         {data &&
           data.map((elem, index) => (

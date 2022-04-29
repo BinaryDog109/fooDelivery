@@ -19,7 +19,7 @@ const myColorPalletes = {
 
 const theme = extendTheme({
   fonts: {
-    heading: "Heading Font Name, sans-serif",
+    heading: "'Nunito', sans-serif",
     body: "'Nunito', sans-serif",
   },
   colors: {

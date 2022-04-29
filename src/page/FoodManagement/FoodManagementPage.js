@@ -4,14 +4,15 @@ import { FoodManagementBell } from "./FoodManagementBell";
 import { FoodManagement } from "./FoodManagement";
 import { useState } from "react";
 
-export const FoodManagementPage = () => {
+export const FoodManagementPage = ({basePath}) => {
   const [tabIndex, setTabIndex] = useState(0);
   const [activeOrder, setActiveOrder] = useState(null);
+
   return (
     <>
       <Navbar>
         <Switch>
-          <Route path={"/"}>
+          <Route path={basePath}>
             <FoodManagementBell
               setActiveOrder={setActiveOrder}
               setTabIndex={setTabIndex}
@@ -20,7 +21,7 @@ export const FoodManagementPage = () => {
         </Switch>
       </Navbar>
       <Switch>
-        <Route path={"/"}>
+        <Route path={basePath}>
           <FoodManagement
             setActiveOrder={setActiveOrder}
             activeOrder={activeOrder}

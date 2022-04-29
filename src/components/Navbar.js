@@ -21,7 +21,8 @@ export const Navbar = ({  children }) => {
     >
       <div className={styles.logo}>
         {/* logo image */}
-        <Text fontSize={["1.5rem", "2rem"]}>D3l1ver00 </Text>
+        <Text fontSize={["1.5rem", "2rem"]} bgGradient='linear(to-r, band1.100, band2.600)'
+  bgClip='text'>D3l1ver00 </Text>
         {/* search bar */}
       </div>
       <nav className={styles.links}>

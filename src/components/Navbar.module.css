@@ -18,15 +18,15 @@
     /* outline: 1px solid black; */
     font-weight: 800;
     /* font-size: 2rem; */
-    flex-grow: 3;
+    /* flex-grow: 3; */
 }
 .links {
     display: flex;
     align-items: center;
     /* outline: 1px solid black; */
-    flex-grow: 1;
+    /* flex-grow: 1; */
 }
 
 .links a {
-    flex-grow: 1;
+    /* flex-grow: 1; */
 }
