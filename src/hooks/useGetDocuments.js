@@ -3,8 +3,12 @@ import { projectFirestore } from "../firebase/config";
 
 // Get a collection or a sub-collection in a document
 // Usage:
-// useGetDocuments("Restaurants")
+// const {docs, error} = useGetDocuments("Restaurants")
+// // const {docs, error} = 
+//    useGetDocuments("Restaurants", null, null, ["status", "==", "register"])
+
 // useGetDocuments("Restaurants", "<userId>", "Food")
+// 
 export const useGetDocuments = (collection, id, subCollection, _query, _orderBy) => {
   const [error, setError] = useState(null);
   const [docs, setDocs] = useState(null);

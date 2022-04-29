@@ -1,4 +1,4 @@
-import { useReducer, useEffect, useState } from "react";
+import { useReducer, useEffect, useState, useRef } from "react";
 import { projectFirestore, timestamp } from "../firebase/config";
 
 // A general-purpose CRUD hook.
@@ -7,6 +7,8 @@ import { projectFirestore, timestamp } from "../firebase/config";
 // add/delete/update/getDoc are functions
 // The variable "response" is a set of state that represents the result of each CRUD operation
 // E.g, response.isPending can show if the add/delete/update/getDoc function is pending
+// const {response, addDoc, deleteDoc, updateDoc, getDoc} = useCRUD()
+// addDoc({name:"xxx", address: "aaa", description: "xxx"})
 const initState = {
   document: null,
   isPending: false,
@@ -38,6 +40,13 @@ const storeReducer = (state, action) => {
         success: "deleted",
         error: null,
       };
+    case "GOT_DOCUMENT":
+      return {
+        isPending: false,
+        document: action.payload,
+        success: "get",
+        error: null,
+      };
     case "ERROR":
       return {
         isPending: false,
@@ -63,7 +72,7 @@ export const useCRUD = (collection, id, subCollection) => {
     if (!hasAborted) dispatch(action);
   };
 
-  const addDoc = async (doc) => {
+  const _addDoc = async (doc) => {
     dispatchIfNotAborted({ type: "PENDING" });
     try {
       const createdAt = timestamp.fromDate(new Date());
@@ -75,7 +84,7 @@ export const useCRUD = (collection, id, subCollection) => {
     }
   };
   // delete a document
-  const deleteDoc = async (id) => {
+  const _deleteDoc = async (id) => {
     dispatch({ type: "PENDING" });
 
     try {
@@ -85,23 +94,22 @@ export const useCRUD = (collection, id, subCollection) => {
       dispatchIfNotAborted({ type: "ERROR", payload: err.message });
     }
   };
-  const getDoc = async (id) => {
+  const _getDoc = async (id) => {
     dispatch({ type: "PENDING" });
-
     const theDoc = await ref.doc(id).get();
-    console.log(theDoc.data());
+    dispatchIfNotAborted({type: "GOT_DOCUMENT", payload: {...theDoc.data()}})
     try {
     } catch (err) {
       dispatchIfNotAborted({ type: "ERROR", payload: err.message });
     }
   };
 
-  const updateDoc = async (id, data) => {
+  const _updateDoc = async (id, data) => {
     dispatchIfNotAborted({ type: "PENDING" });
     const updatedAt = timestamp.fromDate(new Date());
     try {
       const doc = await ref.doc(id).update({ ...data, updatedAt });
-      dispatchIfNotAborted({ type: "UPDATED_DOCUMENT", payload: doc });
+      dispatchIfNotAborted({ type: "UPDATED_DOCUMENT", payload: {...doc.data()} });
     } catch (error) {
       dispatchIfNotAborted({ type: "ERROR", payload: error.message });
     }
@@ -109,5 +117,10 @@ export const useCRUD = (collection, id, subCollection) => {
   useEffect(() => {
     return () => setHasAborted(true);
   }, []);
+  // Cache these fucntions so that they do not get re-defined when rerendered.
+  const getDoc = useRef(_getDoc).current
+  const addDoc = useRef(_addDoc).current
+  const deleteDoc = useRef(_deleteDoc).current
+  const updateDoc = useRef(_updateDoc).current
   return { response, addDoc, deleteDoc, updateDoc, getDoc };
 };

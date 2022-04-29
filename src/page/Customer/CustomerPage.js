@@ -17,6 +17,7 @@ import { Link } from "react-router-dom";
 import { Route } from "react-router-dom";
 import { Switch } from "react-router-dom";
 import { RestaurantCard } from "./RestaurantCard";
+import { ShoppingCartButton } from "./ShoppingCartButton";
 
 export const CustomerPage = ({ basePath = "/" }) => {
   console.log(basePath);
@@ -32,12 +33,14 @@ export const CustomerPage = ({ basePath = "/" }) => {
   );
   return (
     <>
-      <Navbar></Navbar>
+      <Navbar>
+        <ShoppingCartButton></ShoppingCartButton>
+      </Navbar>
       <Container style={styles} mt={5} borderRadius="md" boxShadow={"xl"}>
         <Route exact path={"/cus"}>
           <ScaleFade in={true}>
             <List>
-              <Link to={"adwdwd"}>
+              <Link to={basePath + "/adwdwd"}>
                 <ListItem className="restaurant-item" listStyleType={"none"}>
                   <Box p={4} display={{ md: "flex" }}>
                     <Box flexShrink={0}>

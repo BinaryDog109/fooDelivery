@@ -7,6 +7,7 @@ import { FoodManagementPage } from "./page/FoodManagement/FoodManagementPage";
 function App() {
   const foodManagementBasePath = "/foodmanage";
   const customerBasePath = "/cus";
+  console.log("app renders!")
   return (
     <div className="App">
       <Switch>
