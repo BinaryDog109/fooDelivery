@@ -6,22 +6,25 @@ import {
   TabPanel,
   TabPanels,
   useDisclosure,
-
 } from "@chakra-ui/react";
 import { ItemGrid } from "../../components/ItemGrid";
 import { FoodItemModal } from "./FoodItemModal";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { AddIcon } from "@chakra-ui/icons";
 import { useGetDocuments } from "../../hooks/useGetDocuments";
 import { useUserContext } from "../../hooks/useUserContext";
 import { Card } from "../../components/Card";
 import { ListAccordion } from "../../components/ListAccordion";
 
-export const FoodManagement = () => {
-  const { id, orders, orderError } = useUserContext();  
+export const FoodManagement = ({
+  tabIndex,
+  setTabIndex,
+  activeOrder,
+  setActiveOrder,
+}) => {
+  const { id, orders, orderError } = useUserContext();
   const { docs, error } = useGetDocuments("Restaurants", id, "Food");
-  
-  console.log(orders)
+
   const styles = useMemo(
     () => ({
       width: "85%",
@@ -30,7 +33,6 @@ export const FoodManagement = () => {
     }),
     []
   );
-  const [onFoodTab, setOnFoodTab] = useState(true);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const tabListTextColor = "gray.500";
@@ -40,12 +42,13 @@ export const FoodManagement = () => {
   return useMemo(() => {
     return (
       <div className="food-container" style={styles}>
-        {error && <p>{error.message}</p>}
-        {orderError && <p>{orderError.message}</p>}
+        {error && <p>{error}</p>}
+        {orderError && <p>{orderError}</p>}
 
         <FoodItemModal isOpen={isOpen} onClose={onClose} onOpen={onOpen} />
         <Tabs
-          onChange={(i) => (i === 0 ? setOnFoodTab(true) : setOnFoodTab(false))}
+          index={tabIndex}
+          onChange={setTabIndex}
           variant="soft-rounded"
           colorScheme="yellow"
         >
@@ -62,7 +65,7 @@ export const FoodManagement = () => {
           >
             <Tab color={tabListTextColor}>Food Items</Tab>
             <Tab color={tabListTextColor}>Orders</Tab>
-            {onFoodTab ? (
+            {tabIndex === 0 ? (
               <Button
                 ml={"auto"}
                 leftIcon={<AddIcon />}
@@ -78,12 +81,31 @@ export const FoodManagement = () => {
             <TabPanel p={0}>
               {docs && <ItemGrid data={docs} Card={Card} />}
             </TabPanel>
-            <TabPanel p={0}>            
-                {orders && <ListAccordion data={orders} />}
+            <TabPanel p={0}>
+              {orders && (
+                <ListAccordion
+                  data={orders}
+                  activeOrder={activeOrder}
+                  setActiveOrder={setActiveOrder}
+                />
+              )}
             </TabPanel>
           </TabPanels>
         </Tabs>
       </div>
     );
-  }, [docs, error, onOpen, onClose, isOpen, onFoodTab, styles, orders, orderError]);
+  }, [
+    docs,
+    error,
+    onOpen,
+    onClose,
+    isOpen,
+    styles,
+    orders,
+    orderError,
+    tabIndex,
+    setTabIndex,
+    activeOrder,
+    setActiveOrder,
+  ]);
 };

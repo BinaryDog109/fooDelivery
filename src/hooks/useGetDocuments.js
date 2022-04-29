@@ -5,10 +5,11 @@ import { projectFirestore } from "../firebase/config";
 // Usage:
 // useGetDocuments("Restaurants")
 // useGetDocuments("Restaurants", "<userId>", "Food")
-export const useGetDocuments = (collection, id, subCollection, _query) => {
+export const useGetDocuments = (collection, id, subCollection, _query, _orderBy) => {
   const [error, setError] = useState(null);
   const [docs, setDocs] = useState(null);
   const query = useRef(_query).current 
+  const orderBy = useRef(_orderBy).current 
 
   useEffect(() => {
     let ref = projectFirestore.collection(collection);
@@ -17,6 +18,9 @@ export const useGetDocuments = (collection, id, subCollection, _query) => {
     }
     if (query) {
       ref = ref.where(...query)
+    }
+    if (orderBy) {
+      ref = ref.orderBy(...orderBy)
     }
     const unsub = ref.onSnapshot(
       (snapShot) => {
@@ -31,7 +35,7 @@ export const useGetDocuments = (collection, id, subCollection, _query) => {
     );
 
     return () => unsub();
-  }, [collection, id, subCollection, query]);
+  }, [collection, id, subCollection, query, orderBy]);
 
   return { docs, error };
 };

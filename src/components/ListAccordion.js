@@ -9,17 +9,24 @@ import {
   Text,
   Button,
 } from "@chakra-ui/react";
-export const ListAccordion = ({ data }) => {
-  
+export const ListAccordion = ({ data, activeOrder, setActiveOrder }) => {
+  const index = data.findIndex((elem) => {
+    // console.log(elem.id === activeOrder)
+    return elem.id === activeOrder;
+  });
+
   return (
     <Accordion
       width="100%"
       boxShadow={"lg"}
       borderRadius={10}
       bg={"white"}
-      defaultIndex={[0]}
       allowMultiple
-      allowToggle
+      index={index}
+      onChange={(index) => {
+        const selected = (data[index])
+        setActiveOrder(selected.id);
+      }}
     >
       {data.map((elem) => {
         const date =
@@ -59,7 +66,7 @@ export const ListAccordion = ({ data }) => {
                       {item.number}x {item.name} £{item.price}
                     </Text>
                   ))}
-                <Button my={4}  colorScheme="blue">
+                <Button my={4} colorScheme="blue">
                   Accept & Allocate Delivery
                 </Button>
               </AccordionPanel>

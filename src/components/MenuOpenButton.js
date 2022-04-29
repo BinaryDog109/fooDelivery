@@ -6,7 +6,7 @@ import {
   MenuList,
 } from "@chakra-ui/react";
 
-export const MenuOpenButton = ({ Icon, data }) => {
+export const MenuOpenButton = ({ Icon, data, handleSelect }) => {
   return (
     <Menu>
       <MenuButton
@@ -23,8 +23,7 @@ export const MenuOpenButton = ({ Icon, data }) => {
             <MenuItem
             key={elem.id}
               onClick={() => {
-                window.location.href =
-                  `#${elem.id}`;
+                handleSelect(elem.id)
              }}
               
             >
