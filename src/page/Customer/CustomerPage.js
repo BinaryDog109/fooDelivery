@@ -37,7 +37,6 @@ export const CustomerPage = ({ basePath = "/" }) => {
     []
   );
   const { docs: restaurants, error } = useGetDocuments("Restaurants");
-  console.log(restaurants);
   return (
     <>
       {useMemo(
@@ -46,7 +45,7 @@ export const CustomerPage = ({ basePath = "/" }) => {
             <CartPopup basePath={basePath} />
           </Navbar>
         ),
-        []
+        [basePath]
       )}
       <Container p={2} style={styles} mt={5} borderRadius="md" boxShadow={"xl"}>
         {error && <div>{error}</div>}
