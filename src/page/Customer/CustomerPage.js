@@ -21,10 +21,7 @@ import { CartPopup } from "./CartPopup";
 import { useUserContext } from "../../hooks/useUserContext";
 
 export const CustomerPage = ({ basePath = "/" }) => {
-  const context = useUserContext();
-  console.log(context);
-  const cart = context.cart;
-  console.log(basePath);
+  
   const styles = useMemo(
     () => ({
       width: "85%",
@@ -38,7 +35,7 @@ export const CustomerPage = ({ basePath = "/" }) => {
   return (
     <>
       <Navbar>
-        <CartPopup cart={cart}/>
+        <CartPopup/>
       </Navbar>
       <Container style={styles} mt={5} borderRadius="md" boxShadow={"xl"}>
         <Route exact path={"/cus"}>

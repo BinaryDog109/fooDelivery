@@ -29,9 +29,9 @@ const storeReducer = (state, action) => {
     case "UPDATED_DOCUMENT":
       return {
         isPending: false,
-        document: action.payload,
         success: "updated",
         error: null,
+        ...state,
       };
     case "DELETED_DOCUMENT":
       return {
@@ -96,8 +96,11 @@ export const useCRUD = (collection, id, subCollection) => {
   };
   const _getDoc = async (id) => {
     dispatch({ type: "PENDING" });
-    const theDoc = await ref.doc(id).onSnapshot(docSnapshot => {
-      dispatchIfNotAborted({type: "GOT_DOCUMENT", payload: {...docSnapshot.data()}})
+    await ref.doc(id).onSnapshot((docSnapshot) => {
+      dispatchIfNotAborted({
+        type: "GOT_DOCUMENT",
+        payload: { ...docSnapshot.data() },
+      });
     });
     try {
     } catch (err) {
@@ -110,8 +113,10 @@ export const useCRUD = (collection, id, subCollection) => {
     const updatedAt = timestamp.fromDate(new Date());
     try {
       const doc = await ref.doc(id).update({ ...data, updatedAt });
-      dispatchIfNotAborted({ type: "UPDATED_DOCUMENT", payload: {...doc.data()} });
+      // doc will be undefined, if success
+      dispatchIfNotAborted({ type: "UPDATED_DOCUMENT" });
     } catch (error) {
+      console.log("error", error);
       dispatchIfNotAborted({ type: "ERROR", payload: error.message });
     }
   };
@@ -119,9 +124,9 @@ export const useCRUD = (collection, id, subCollection) => {
     return () => setHasAborted(true);
   }, []);
   // Cache these fucntions so that they do not get re-defined when rerendered.
-  const getDoc = useRef(_getDoc).current
-  const addDoc = useRef(_addDoc).current
-  const deleteDoc = useRef(_deleteDoc).current
-  const updateDoc = useRef(_updateDoc).current
+  const getDoc = useRef(_getDoc).current;
+  const addDoc = useRef(_addDoc).current;
+  const deleteDoc = useRef(_deleteDoc).current;
+  const updateDoc = useRef(_updateDoc).current;
   return { response, addDoc, deleteDoc, updateDoc, getDoc };
 };

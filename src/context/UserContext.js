@@ -6,12 +6,12 @@ export const UserContext = createContext();
 export const UserContextProvider = ({ children }) => {
   const id = "jqujejy9RKZCYLILWq6V";
 
-  const { getDoc, response } = useCRUD("Users");
+  const { getDoc, updateDoc: updateUser, response } = useCRUD("Users");
   // Get user's cart
   useEffect(() => {
     getDoc(id);
   }, [getDoc]);
-  const context = {id, ...response.document}
+  const context = {id, updateUser, response }
   // Restaurant manager context
   // const id = "Mbsj4jfzNKIfoT2KKPPJ";
   // const { docs: orders, error: orderError } = useGetDocuments(
