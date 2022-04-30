@@ -7,6 +7,7 @@ import {
   TableCaption,
   Text,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import {
   Table,
@@ -18,18 +19,21 @@ import {
   Td,
   TableContainer,
 } from "@chakra-ui/react";
-import { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useHistory } from "react-router-dom";
 import { OperationAlertDialog } from "../../components/OperationAlertDialog";
 import { ReturnButton } from "../../components/ReturnButton";
 import { useCart } from "../../hooks/useCart";
+import { useCRUD } from "../../hooks/useCRUD";
 
-export const CheckoutCart = () => {
+export const CheckoutCart = ({basePath}) => {
   // Userd by Paid Now dialog
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef();
   const history = useHistory();
-  const { userId, cart, error: cartError, isPending: cartPendng } = useCart();
+  const { userId, cart, error: cartError, updateUser, isPending: cartPendng } = useCart();
+  const { batchAdd, response } = useCRUD("Orders");
+  const toast = useToast();
   const totalPrice =
     cart &&
     cart
@@ -49,7 +53,55 @@ export const CheckoutCart = () => {
       return acc;
     }, Object.create(null));
   const orderNum = ordersObj && Object.keys(ordersObj).length;
-  console.log(ordersObj);
+  //   Creating new orders
+  const newOrders =
+    ordersObj &&
+    Object.keys(ordersObj).map((restaurantId) => {
+      const newOrder = {
+        status: "Paid",
+        postCode: "SO16 3UF",
+        restaurantId,
+        uid: userId,
+        food: ordersObj[restaurantId].map((item) => ({
+          name: item.name,
+          price: item.price,
+          number: item.number,
+        })),
+      };
+      return newOrder;
+    });
+  const handlePay = () => {
+    if (newOrders) {
+      batchAdd(newOrders);
+      onClose()
+      updateUser(userId, {cart: []})
+      history.push(basePath)
+    } else {
+      console.log("There are no items!");
+    }
+  };
+  //   Handle batch success and error
+  useEffect(() => {
+    if (response.success) {
+      toast({
+        title: "Orders added, congrats!",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  }, [response.success, toast]);
+  useEffect(() => {
+    if (response.error) {
+      toast({
+        title: "Fail to order",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  }, [response.error, toast]);
+
   return (
     ordersObj && (
       <>
@@ -69,14 +121,14 @@ export const CheckoutCart = () => {
             <Button
               colorScheme="red"
               onClick={() => {
-                console.log("paid")
+                handlePay()
               }}
               ml={3}
             >
               Confirm Payment
             </Button>
           </OperationAlertDialog>
-          
+
           <Box textAlign={"left"}>
             <ReturnButton history={history} />
           </Box>
@@ -90,7 +142,7 @@ export const CheckoutCart = () => {
           </Heading>
           <Divider />
           {Object.keys(ordersObj).map((restaurantId) => (
-            <>
+            <React.Fragment key={restaurantId}>
               <TableContainer mb={4}>
                 <Table size="sm">
                   <TableCaption mt={1} mb={2}>
@@ -109,8 +161,8 @@ export const CheckoutCart = () => {
                     </Tr>
                   </Thead>
                   <Tbody>
-                    {ordersObj[restaurantId].map((item) => (
-                      <Tr>
+                    {ordersObj[restaurantId].map((item, index) => (
+                      <Tr key={index}>
                         <Td>{item.number}</Td>
                         <Td>{item.name}</Td>
                         <Td isNumeric>{item.price}</Td>
@@ -121,7 +173,7 @@ export const CheckoutCart = () => {
                 </Table>
               </TableContainer>
               <Divider></Divider>
-            </>
+            </React.Fragment>
           ))}
           <Box textAlign={"right"} className="checkout-info">
             <Heading mt={2} size={"sm"} as={"h4"}>
@@ -145,6 +197,7 @@ export const CheckoutCart = () => {
                 bgGradient: "linear(to-r, band1.200, band2.700)",
               }}
               onClick={onOpen}
+              disabled={orderNum<=0 || response.isPending} 
             >
               Pay Now
             </Button>

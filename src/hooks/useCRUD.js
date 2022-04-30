@@ -26,6 +26,13 @@ const storeReducer = (state, action) => {
         success: "added",
         error: null,
       };
+    case "BATCH_ADDED_DOCUMENT":
+      return {
+        isPending: false,
+        document: action.payload,
+        success: "batch_added",
+        error: null,
+      };
     case "UPDATED_DOCUMENT":
       return {
         isPending: false,
@@ -120,6 +127,21 @@ export const useCRUD = (collection, id, subCollection) => {
       dispatchIfNotAborted({ type: "ERROR", payload: error.message });
     }
   };
+  const _batchAdd = async (data) => {
+    try {
+      const batch = projectFirestore.batch();
+      data.forEach((d) => {
+        const createdAt = timestamp.fromDate(new Date());
+        const newDocRef = ref.doc();
+        batch.set(newDocRef, {...d, createdAt});
+      });
+      const doc = await batch.commit();
+      console.log("batch added:", doc);
+      dispatchIfNotAborted({ type: "BATCH_ADDED_DOCUMENT", payload: doc });
+    } catch (error) {
+      dispatchIfNotAborted({ type: "ERROR", payload: error.message });
+    }
+  };
   useEffect(() => {
     return () => setHasAborted(true);
   }, []);
@@ -128,5 +150,6 @@ export const useCRUD = (collection, id, subCollection) => {
   const addDoc = useRef(_addDoc).current;
   const deleteDoc = useRef(_deleteDoc).current;
   const updateDoc = useRef(_updateDoc).current;
-  return { response, addDoc, deleteDoc, updateDoc, getDoc };
+  const batchAdd = useRef(_batchAdd).current;
+  return { response, addDoc, deleteDoc, updateDoc, getDoc, batchAdd };
 };

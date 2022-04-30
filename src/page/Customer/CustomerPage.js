@@ -72,7 +72,7 @@ export const CustomerPage = ({ basePath = "/" }) => {
             <RestaurantCard></RestaurantCard>
           </Route>
           <Route path={basePath + "/checkout"}>
-            <CheckoutCart />
+            <CheckoutCart basePath={basePath} />
           </Route>
         </Switch>
       </Container>
