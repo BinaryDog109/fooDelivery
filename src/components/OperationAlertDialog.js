@@ -7,7 +7,14 @@ import {
   AlertDialogOverlay,
 } from "@chakra-ui/react";
 
-export function OperationAlertDialog({ children, isOpen, cancelRef, onClose }) {
+export function OperationAlertDialog({
+  children,
+  isOpen,
+  cancelRef,
+  onClose,
+  title = "Delete this food item",
+  text = "Are you sure? You can't undo this action afterwards.",
+}) {
   return (
     <>
       <AlertDialog
@@ -19,12 +26,10 @@ export function OperationAlertDialog({ children, isOpen, cancelRef, onClose }) {
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Delete this food item
+              {title}
             </AlertDialogHeader>
 
-            <AlertDialogBody>
-              Are you sure? You can't undo this action afterwards.
-            </AlertDialogBody>
+            <AlertDialogBody>{text}</AlertDialogBody>
 
             <AlertDialogFooter>{children}</AlertDialogFooter>
           </AlertDialogContent>

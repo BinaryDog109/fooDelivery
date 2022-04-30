@@ -3,14 +3,14 @@ import {
   Box,
   Flex,
   useColorModeValue,
-  HStack,
   Text,
 } from "@chakra-ui/react";
 import { useCart } from "../../hooks/useCart";
-import { useUserContext } from "../../hooks/useUserContext";
 import { ItemAddMinusButton } from "./ItemAddMinusButton";
 
-export const RestaurantFoodCard = ({ data }) => {
+export const RestaurantFoodCard = ({ data, ...props }) => {
+  const {restaurantId, restaurantInfo} = props
+  
   const {
     userId,
     cart,
@@ -37,6 +37,8 @@ export const RestaurantFoodCard = ({ data }) => {
         foodId: item.id,
         name: item.name,
         price: item.price,
+        restaurantId,
+        restaurantInfo,
         number: 1,
       };
       cart.push(foodTobeAddedToCart);
@@ -44,7 +46,6 @@ export const RestaurantFoodCard = ({ data }) => {
 
     updateUser(userId, { cart });
   };
-
   return (
     <Flex
       bg={useColorModeValue("white", "gray.800")}

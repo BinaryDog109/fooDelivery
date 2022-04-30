@@ -23,6 +23,7 @@ import { CartPopup } from "./CartPopup";
 import { useUserContext } from "../../hooks/useUserContext";
 import { RestaurantListItem } from "./RestaurantListItem";
 import { useGetDocuments } from "../../hooks/useGetDocuments";
+import {CheckoutCart} from "./CheckoutCart"
 
 export const CustomerPage = ({ basePath = "/" }) => {
   const styles = useMemo(
@@ -42,7 +43,7 @@ export const CustomerPage = ({ basePath = "/" }) => {
       {useMemo(
         () => (
           <Navbar>
-            <CartPopup />
+            <CartPopup basePath={basePath} />
           </Navbar>
         ),
         []
@@ -69,6 +70,9 @@ export const CustomerPage = ({ basePath = "/" }) => {
           </Route>
           <Route path={basePath + "/restaurants/:id"}>
             <RestaurantCard></RestaurantCard>
+          </Route>
+          <Route path={basePath + "/checkout"}>
+            <CheckoutCart />
           </Route>
         </Switch>
       </Container>

@@ -19,11 +19,12 @@ import {
 } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { AiOutlineShoppingCart } from "react-icons/ai";
+import { Link } from "react-router-dom";
 import { useCart } from "../../hooks/useCart";
 import { useUserContext } from "../../hooks/useUserContext";
 import { ItemAddMinusButton } from "./ItemAddMinusButton";
 
-export const CartPopup = () => {
+export const CartPopup = ({basePath}) => {
   const toast = useToast();
   const { userId, cart, updateUser, isPending, success } = useCart();
   // Handles the operations' response: resets the form if success, displays a toast
@@ -114,15 +115,17 @@ export const CartPopup = () => {
                 </Flex>
               ))}
           </PopoverBody>
-          <Button variant={"ghost"}>
-            <PopoverFooter
-              borderTop={0}
-              bgGradient="linear(to-r, band1.100, band2.600)"
-              bgClip="text"
-            >
-              Checkout £{totalPrice}
-            </PopoverFooter>
-          </Button>
+          <Link to={basePath + "/checkout"}>
+            <Button w={"100%"} variant={"ghost"}>
+              <PopoverFooter
+                borderTop={0}
+                bgGradient="linear(to-r, band1.100, band2.600)"
+                bgClip="text"
+              >
+                Checkout £{totalPrice}
+              </PopoverFooter>
+            </Button>
+          </Link>
         </PopoverContent>
       </Portal>
     </Popover>

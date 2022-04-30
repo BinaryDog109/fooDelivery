@@ -19,7 +19,7 @@ export const ItemAddMinusButton = ({
         icon={<AddIcon />}
         isRound
       ></IconButton>
-      {midNumberDisplay && midNumber}
+      <span style={{color: "purple"}}>{midNumberDisplay && midNumber}</span>
       <IconButton
         disabled={isPending}
         onClick={() => {

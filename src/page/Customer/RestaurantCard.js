@@ -13,10 +13,6 @@ import { ItemGrid } from "../../components/ItemGrid";
 import { RestaurantFoodCard } from "./RestaurantFoodCard";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { ReturnButton } from "../../components/ReturnButton";
-import { useCRUD } from "../../hooks/useCRUD";
-import { useEffect } from "react";
-import { useUserContext } from "../../hooks/useUserContext";
-import { useCart } from "../../hooks/useCart";
 import { useRestaurant } from "../../hooks/useRetaurant";
 
 export const RestaurantCard = () => {
@@ -24,12 +20,13 @@ export const RestaurantCard = () => {
   const { docs: food, error } = useGetDocuments("Restaurants", restaurantId, "Food");
   const history = useHistory();
   const {restaurantInfo} = useRestaurant(restaurantId)
+  if (food) food.restaurantId = restaurantId
 
-  return (
+  return !restaurantInfo? null : (
     <>
       {error && <div>{error}</div>}
       <ScaleFade in={true}>
-        <Box p={2} bg={"white"}>
+        <Box p={2} >
           <Box textAlign={"left"}>
             <ReturnButton history={history} />
           </Box>
@@ -39,12 +36,13 @@ export const RestaurantCard = () => {
             bgGradient="linear(to-r, band1.100, band2.600)"
             bgClip="text"
           >
-            {restaurantInfo && restaurantInfo.name}
+            {restaurantInfo.name}
           </Heading>
           {food && (
             <ItemGrid
               columns={{ sm: 1, md: 2 }}
               data={food}
+              elemProps={{restaurantId, restaurantInfo}}
               Card={RestaurantFoodCard}
             />
           )}
