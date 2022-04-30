@@ -2,6 +2,7 @@ import { extendTheme } from "@chakra-ui/react";
 
 const myColorPalletes = {
   band1: {
+    50: "#0987A0ab",
     100: "#0987A0",
     200: "#006D85",
     300: "#00536B",

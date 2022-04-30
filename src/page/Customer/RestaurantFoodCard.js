@@ -1,8 +1,50 @@
-import { chakra, Box, Flex, useColorModeValue, HStack, Text } from "@chakra-ui/react";
-import { StarIcon } from "@chakra-ui/icons";
+import {
+  chakra,
+  Box,
+  Flex,
+  useColorModeValue,
+  HStack,
+  Text,
+} from "@chakra-ui/react";
+import { useCart } from "../../hooks/useCart";
+import { useUserContext } from "../../hooks/useUserContext";
+import { ItemAddMinusButton } from "./ItemAddMinusButton";
 
-export const RestaurantFoodCard = ({data}) => {
-  console.log(data)
+export const RestaurantFoodCard = ({ data }) => {
+  const {
+    userId,
+    cart,
+    error: cartError,
+    updateUser,
+    isPending: cartPendng,
+  } = useCart();
+  const foodInCartIndex =
+    cart && cart.findIndex((item) => item.foodId === data.id);
+  const foodInCart = cart && cart[foodInCartIndex];
+  const handleCart = (sign, item) => {
+    if (foodInCartIndex > -1) {
+      // If the food already exists in the cart, update the num in the cart
+      item = cart[foodInCartIndex];
+      sign === "+"
+        ? (item.number = +item.number + 1)
+        : (item.number = +item.number - 1);
+      if (item.number === 0) {
+        // If there is 0 item of this food, delete it from the cart
+        cart.splice(foodInCartIndex, 1);
+      }
+    } else {
+      const foodTobeAddedToCart = {
+        foodId: item.id,
+        name: item.name,
+        price: item.price,
+        number: 1,
+      };
+      cart.push(foodTobeAddedToCart);
+    }
+
+    updateUser(userId, { cart });
+  };
+
   return (
     <Flex
       bg={useColorModeValue("white", "gray.800")}
@@ -11,14 +53,14 @@ export const RestaurantFoodCard = ({data}) => {
       overflow="hidden"
       textAlign={"left"}
     >
+      {cartError && <Text>{cartError}</Text>}
       <Box
         w={1 / 3}
         bgSize="cover"
         style={{
-          backgroundImage:
-            `url(${data.imagetoken})`,
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center"
+          backgroundImage: `url(${data.imagetoken})`,
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
         }}
       ></Box>
 
@@ -29,8 +71,7 @@ export const RestaurantFoodCard = ({data}) => {
           fontWeight="bold"
           color={useColorModeValue("gray.800", "white")}
         >
-            <Text>{data.name}</Text>
-          
+          <Text>{data.name}</Text>
         </chakra.h1>
 
         <chakra.p
@@ -42,30 +83,44 @@ export const RestaurantFoodCard = ({data}) => {
           {data.description}
         </chakra.p>
 
-        <Flex flexWrap={"wrap"} mt={3} alignItems="center" justifyContent="space-between">
+        <Flex
+          flexWrap={"wrap"}
+          mt={3}
+          alignItems="center"
+          justifyContent="space-between"
+        >
           <chakra.h1 color="gray.600" fontWeight="bold" fontSize="lg">
-            {data.price}
+            £{data.price}
           </chakra.h1>
-          <chakra.button
-            px={2}
-            py={1}
-            bgGradient='linear(to-r, band1.100, band2.600)'
-            fontSize="xs"
-            color="white"
-            fontWeight="bold"
-            rounded="lg"
-            textTransform="uppercase"
-            _hover={{
-                bg: "purple.700"
-              
-            }}
-            _focus={{
-              bg: "cyan.800",
-            }}
-          >
-            Add to cart
-          </chakra.button>
-        </Flex>
+          {foodInCart && foodInCart.number > 0 ? (
+            <ItemAddMinusButton
+              midNumberDisplay
+              midNumber={foodInCart.number}
+              item={data}
+              handleClick={handleCart}
+            />
+          ) : (!cart? null : (
+            <chakra.button
+              px={2}
+              py={1}
+              bgGradient="linear(to-r, band1.100, band2.600)"
+              fontSize="xs"
+              color="white"
+              fontWeight="bold"
+              rounded="lg"
+              textTransform="uppercase"
+              _hover={{
+                bgGradient: "linear(to-r, band1.50, band2.600)",
+              }}
+              _focus={{
+                bgGradient: "linear(to-r, band1.200, band2.700)",
+              }}
+              onClick={() => handleCart("+", data)}
+            >
+              Add to cart
+            </chakra.button>
+          ))}
+        </Flex> 
       </Box>
     </Flex>
   );

@@ -19,17 +19,15 @@ import {
 } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { AiOutlineShoppingCart } from "react-icons/ai";
+import { useCart } from "../../hooks/useCart";
 import { useUserContext } from "../../hooks/useUserContext";
+import { ItemAddMinusButton } from "./ItemAddMinusButton";
 
 export const CartPopup = () => {
-  const context = useUserContext();
   const toast = useToast();
-
-  console.log(context);
-  const { id, response, updateUser } = context;
-  const { document: userInfo, success, error, isPending } = response;
+  const { userId, cart, updateUser, isPending, success } = useCart();
   // Handles the operations' response: resets the form if success, displays a toast
-  // You can use a simple if statement but toast() will throw an error
+  // You can use a simple if statement but toast() will throw an error (try update the state while rendering)
   useEffect(() => {
     if (success) {
       toast({
@@ -38,9 +36,8 @@ export const CartPopup = () => {
         duration: 3000,
         isClosable: true,
       });
-    } 
+    }
   }, [success, toast]);
-  const cart = userInfo && userInfo.cart;
   const totalPrice =
     cart &&
     cart
@@ -52,15 +49,17 @@ export const CartPopup = () => {
       }, 0)
       .toFixed(2);
   const handleCart = (sign, item) => {
-    sign === "+" ? (item.number = +item.number + 1) : (item.number = +item.number - 1);
+    sign === "+"
+      ? (item.number = +item.number + 1)
+      : (item.number = +item.number - 1);
     if (item.number === 0) {
       // If there is 0 number of this food, delete it from the cart
-      const index = cart.findIndex(food => food.foodId === item.foodId)
-      cart.splice(index, 1)
+      const index = cart.findIndex((food) => food.foodId === item.foodId);
+      cart.splice(index, 1);
     }
-    updateUser(id, {cart})
+    updateUser(userId, { cart });
   };
-  
+
   return (
     <Popover>
       <PopoverTrigger>
@@ -107,27 +106,11 @@ export const CartPopup = () => {
                   <Text>
                     {item.number}x {item.name} £{item.price} per
                   </Text>
-                  <Box flexShrink={0}>
-                    <IconButton
-                     disabled={isPending}
-                      onClick={() => {
-                        handleCart("+", item);
-                      }}
-                      size={"xs"}
-                      icon={<AddIcon />}
-                      isRound
-                    ></IconButton>
-                    <IconButton
-                    disabled={isPending}
-                      onClick={() => {
-                        handleCart("-", item);
-                      }}
-                      ml={1}
-                      size={"xs"}
-                      icon={<MinusIcon />}
-                      isRound
-                    ></IconButton>
-                  </Box>
+                  <ItemAddMinusButton
+                    item={item}
+                    handleClick={handleCart}
+                    isPending={isPending}
+                  />
                 </Flex>
               ))}
           </PopoverBody>

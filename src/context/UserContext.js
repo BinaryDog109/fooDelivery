@@ -4,10 +4,11 @@ import { useCRUD } from "../hooks/useCRUD";
 export const UserContext = createContext();
 
 export const UserContextProvider = ({ children }) => {
-  const id = "jqujejy9RKZCYLILWq6V";
+  const id = "jqujejy9RKZCYLILWq6V"; // User Auth Id
 
   const { getDoc, updateDoc: updateUser, response } = useCRUD("Users");
-  // Get user's cart
+  // Get user's info
+  // Todo: After a user has signed up, create a cart for the user
   useEffect(() => {
     getDoc(id);
   }, [getDoc]);

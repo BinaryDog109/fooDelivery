@@ -14,7 +14,6 @@ export const useGetDocuments = (collection, id, subCollection, _query, _orderBy)
   const [docs, setDocs] = useState(null);
   const query = useRef(_query).current 
   const orderBy = useRef(_orderBy).current 
-
   useEffect(() => {
     let ref = projectFirestore.collection(collection);
     if (id && subCollection) {
