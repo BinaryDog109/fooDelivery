@@ -31,6 +31,7 @@ export const DisplayMap = ({ order = null, restaurant = null }) => {
     });
   }
   const _setPositionsAndDirection = async (orderAdress, restaurantAddress) => {
+    console.log("render map runs")
     const position = await getCurrentPosition();
     const positionlat = position.coords.latitude;
     const positionlon = position.coords.longitude;
