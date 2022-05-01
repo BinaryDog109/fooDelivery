@@ -3,14 +3,14 @@ import { Icon } from "@chakra-ui/react";
 import { HiOutlineLocationMarker, HiOutlineClock } from "react-icons/hi";
 import {RestaurantItemModal} from "./RestaurantItemModal";
 
-export const RestaurantListDetail = ({data}) => {
+export const RestaurantListDetail = ({data, status}) => {
 
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     return (
 
         <>
-            <RestaurantItemModal data={data} isOpen={isOpen} onClose={onClose} onOpen={onOpen} />
+            <RestaurantItemModal data={data} status={status} isOpen={isOpen} onClose={onClose} onOpen={onOpen} />
             <Box p={8} display={{ md: "flex" }}>
                 <Box flexShrink={0}>
                     <Image
@@ -64,8 +64,9 @@ export const RestaurantListDetail = ({data}) => {
                         <Icon mr={1} as={HiOutlineClock} />
                         <span>12:00~2:00</span>
                     </Text>
-
-                    <chakra.button
+                    {
+                        status!==1?
+                        <chakra.button
                         px={3}
                         py={4}
                         mt={2}
@@ -76,35 +77,39 @@ export const RestaurantListDetail = ({data}) => {
                         rounded="lg"
                         textTransform="uppercase"
                         _hover={{
-                            bg: "green.700",
-                            color: "gray.100"
-                        }}
+                        bg: "green.700",
+                        color: "gray.100"
+                    }}
                         _focus={{
-                            bg: "gray.400",
-                        }}
-                    >
+                        bg: "gray.400",
+                    }}
+                        >
                         Approve
-                    </chakra.button>
-                    <chakra.button
-                        px={3}
-                        py={4}
-                        mt={2}
-                        bg="red.300"
-                        fontSize="xs"
-                        color="gray.900"
-                        fontWeight="bold"
-                        rounded="lg"
-                        textTransform="uppercase"
-                        _hover={{
-                            bg: "red.700",
-                            color: "gray.100"
-                        }}
-                        _focus={{
-                            bg: "gray.400",
-                        }}
-                    >
-                        decline
-                    </chakra.button>
+                        </chakra.button>:null
+                    }
+                    {
+                        status!==2?
+                        <chakra.button
+                            px={3}
+                            py={4}
+                            mt={2}
+                            bg="red.300"
+                            fontSize="xs"
+                            color="gray.900"
+                            fontWeight="bold"
+                            rounded="lg"
+                            textTransform="uppercase"
+                            _hover={{
+                                bg: "red.700",
+                                color: "gray.100"
+                            }}
+                            _focus={{
+                                bg: "gray.400",
+                            }}
+                        >
+                            decline
+                        </chakra.button>:null
+                    }
                 </Box>
 
             </Box>

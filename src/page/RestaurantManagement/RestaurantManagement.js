@@ -5,7 +5,7 @@ import {
     TabList,
     TabPanel,
     TabPanels,
-    useDisclosure,
+    useDisclosure, Container, ScaleFade, List, ListItem,
 } from "@chakra-ui/react";
 import { ItemGrid } from "../../components/ItemGrid";
 import { RestaurantItemModal } from "./RestaurantItemModal";
@@ -15,6 +15,9 @@ import { useGetDocuments } from "../../hooks/useGetDocuments";
 import { useUserContext } from "../../hooks/useUserContext";
 import { Card } from "../../components/Card";
 import { ListAccordion } from "../../components/ListAccordion";
+import {RestaurantListDetail} from "./RestaurantListDetail";
+import {Route, Switch} from "react-router-dom";
+const basePath = "/restaurantmanage";
 
 export const RestaurantManagement = ({
                                    tabIndex,
@@ -22,6 +25,9 @@ export const RestaurantManagement = ({
                                    activeOrder,
                                    setActiveOrder,
                                }) => {
+
+    const { docs: restaurants } = useGetDocuments("Restaurants");
+    console.log(restaurants);
     const { id, orders, orderError } = useUserContext();
     const { docs, error } = useGetDocuments("Restaurants", id, "Food");
 
@@ -30,6 +36,17 @@ export const RestaurantManagement = ({
             width: "85%",
             maxWidth: "960px",
             margin: "0 auto",
+        }),
+        []
+    );
+
+    const listStyles = useMemo(
+        () => ({
+            width: "100%",
+            maxWidth: "960px",
+            marginLeft: "auto",
+            marginRight: "auto",
+            backgroundColor: "white",
         }),
         []
     );
@@ -78,20 +95,68 @@ export const RestaurantManagement = ({
                         {/*    </Button>*/}
                         {/*) : null}*/}
                     </TabList>
-                    <TabPanels pt={5} mb={yOffset}>
-                        <TabPanel p={0}>
-                            {docs && <ItemGrid data={docs} Card={Card} />}
-                        </TabPanel>
-                        <TabPanel p={0}>
-                            {orders && (
-                                <ListAccordion
-                                    data={orders}
-                                    activeOrder={activeOrder}
-                                    setActiveOrder={setActiveOrder}
-                                />
-                            )}
-                        </TabPanel>
-                    </TabPanels>
+                    <Container p={2} style={listStyles} mt={5} borderRadius="md" boxShadow={"xl"}>
+                        {error && <div>{error}</div>}
+                        <Switch>
+                            <Route exact path={"/restaurantmanage"}>
+                                <ScaleFade in={true}>
+                                    <TabPanels pt={5} mb={yOffset}>
+                                        <TabPanel p={0}>
+                                            <List>
+                                                {restaurants &&
+                                                restaurants.map((restaurant) => {
+                                                    if (restaurant.status === "waiting")
+                                                    return(
+                                                        <ListItem borderRadius={"md"} _hover={{bg: "gray.200"}}
+                                                                  className="restaurant-item"
+                                                                  listStyleType={"none"}
+                                                        >
+                                                            <RestaurantListDetail data={restaurant} status={0}/>
+                                                        </ListItem>
+                                                    )
+                                                })}
+                                            </List>
+                                        </TabPanel>
+                                        <TabPanel p={0}>
+                                            <List>
+                                                {restaurants &&
+                                                restaurants.map((restaurant) => {
+                                                    if (restaurant.status === "accepted")
+                                                        return(
+                                                            <ListItem borderRadius={"md"} _hover={{bg: "gray.200"}}
+                                                                      className="restaurant-item"
+                                                                      listStyleType={"none"}
+                                                            >
+                                                                <RestaurantListDetail data={restaurant} status={1}/>
+                                                            </ListItem>
+                                                        )
+                                                })}
+                                            </List>
+                                        </TabPanel>
+                                        <TabPanel p={0}>
+                                            <List>
+                                                {restaurants &&
+                                                restaurants.map((restaurant) => {
+                                                    if (restaurant.status === "declined")
+                                                        return(
+                                                            <ListItem borderRadius={"md"} _hover={{bg: "gray.200"}}
+                                                                      className="restaurant-item"
+                                                                      listStyleType={"none"}
+                                                            >
+                                                                <RestaurantListDetail data={restaurant} status={2}/>
+                                                            </ListItem>
+                                                        )
+                                                })}
+                                            </List>
+                                        </TabPanel>
+                                    </TabPanels>
+                                </ScaleFade>
+                            </Route>
+                            <Route path={basePath + "/restaurants/:id"}>
+                                {/*<RestaurantListCard></RestaurantListCard>*/}
+                            </Route>
+                        </Switch>
+                    </Container>
                 </Tabs>
             </div>
         );

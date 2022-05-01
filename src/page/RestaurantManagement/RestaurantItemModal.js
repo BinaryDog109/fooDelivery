@@ -17,7 +17,7 @@ import { useUserContext } from "../../hooks/useUserContext";
 import { useGetDocuments } from "../../hooks/useGetDocuments";
 import { useEffect, useMemo, useState } from "react";
 // Wraps a HighModal and inserts a FoodItemForm
-export const RestaurantItemModal = ({ data, isOpen, onClose, onOpen }) => {
+export const RestaurantItemModal = ({ data, status, isOpen, onClose, onOpen }) => {
     const [scrollBehavior, setScrollBehavior] = React.useState('inside')
 
     const btnRef = React.useRef()
@@ -47,47 +47,53 @@ export const RestaurantItemModal = ({ data, isOpen, onClose, onOpen }) => {
                         {data.description}
                     </ModalBody>
                     <ModalFooter>
-                        <chakra.button
-                            px={3}
-                            py={3}
-                            mt={2}
-                            bg="green.200"
-                            fontSize="xs"
-                            color="gray.900"
-                            fontWeight="bold"
-                            rounded="lg"
-                            textTransform="uppercase"
-                            _hover={{
-                                bg: "green.700",
-                                color: "gray.100"
-                            }}
-                            _focus={{
-                                bg: "gray.400",
-                            }}
-                        >
-                            Approve
-                        </chakra.button>
-                        <chakra.button
-                            px={3}
-                            py={3}
-                            mt={2}
-                            ml={3}
-                            bg="red.300"
-                            fontSize="xs"
-                            color="gray.900"
-                            fontWeight="bold"
-                            rounded="lg"
-                            textTransform="uppercase"
-                            _hover={{
-                                bg: "red.700",
-                                color: "gray.100"
-                            }}
-                            _focus={{
-                                bg: "gray.400",
-                            }}
-                        >
-                            decline
-                        </chakra.button>
+                        {
+                            status !== 1 ?
+                                <chakra.button
+                                    px={3}
+                                    py={3}
+                                    mt={2}
+                                    bg="green.200"
+                                    fontSize="xs"
+                                    color="gray.900"
+                                    fontWeight="bold"
+                                    rounded="lg"
+                                    textTransform="uppercase"
+                                    _hover={{
+                                        bg: "green.700",
+                                        color: "gray.100"
+                                    }}
+                                    _focus={{
+                                        bg: "gray.400",
+                                    }}
+                                >
+                                    Approve
+                                </chakra.button> : null
+                        }
+                        {
+                            status !== 2 ?
+                                <chakra.button
+                                    px={3}
+                                    py={3}
+                                    mt={2}
+                                    ml={3}
+                                    bg="red.300"
+                                    fontSize="xs"
+                                    color="gray.900"
+                                    fontWeight="bold"
+                                    rounded="lg"
+                                    textTransform="uppercase"
+                                    _hover={{
+                                        bg: "red.700",
+                                        color: "gray.100"
+                                    }}
+                                    _focus={{
+                                        bg: "gray.400",
+                                    }}
+                                >
+                                    decline
+                                </chakra.button> : null
+                        }
                         {/*<Button onClick={onClose}>Close</Button>*/}
                     </ModalFooter>
                 </ModalContent>
