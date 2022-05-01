@@ -26,8 +26,8 @@ import { ReturnButton } from "../../components/ReturnButton";
 import { useCart } from "../../hooks/useCart";
 import { useCRUD } from "../../hooks/useCRUD";
 
-export const CheckoutCart = ({basePath}) => {
-  // Userd by Paid Now dialog
+export const CheckoutCard = ({basePath}) => {
+  // Userd by the Paid Now dialog
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef();
   const history = useHistory();
@@ -75,7 +75,7 @@ export const CheckoutCart = ({basePath}) => {
       batchAdd(newOrders);
       onClose()
       updateUser(userId, {cart: []})
-      history.push(basePath)
+      history.push(basePath + "/orders")
     } else {
       console.log("There are no items!");
     }

@@ -22,7 +22,7 @@ export const RestaurantListItem = ({data}) => {
             letterSpacing="wide"
             color="teal.600"
           >
-            Marketing
+            Restaurant
           </Text>
           <Text
             mt={1}

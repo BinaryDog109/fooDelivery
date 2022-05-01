@@ -1,6 +1,6 @@
 import { Button, Text } from "@chakra-ui/react";
 
-export const ReturnButton = ({ history, ...props }) => {
+export const ReturnButton = ({ history, to, ...props }) => {
   return (
     <Button
       {...props}
@@ -18,7 +18,7 @@ export const ReturnButton = ({ history, ...props }) => {
       _focus={{
         bg: "gray.400",
       }}
-      onClick={() => history.goBack()}
+      onClick={() => !to? history.goBack():history.push(to)}
     >
       <Text bgGradient="linear(to-r, band1.100, band2.600)" bgClip="text">
         {"< "}return

@@ -9,12 +9,29 @@ import {
   Text,
   Button,
 } from "@chakra-ui/react";
-export const ListAccordion = ({ data, activeOrder, setActiveOrder }) => {
+export const ListAccordion = ({
+  data,
+  activeOrder,
+  setActiveOrder,
+  roles = "restaurant manager",
+}) => {
   const index = data.findIndex((elem) => {
     // console.log(elem.id === activeOrder)
     return elem.id === activeOrder;
   });
-
+  const computeStatusColor = (status) => {
+    const statusStr = status.toUpperCase();
+    switch (statusStr) {
+      case "PAID":
+        return "band2";
+      case "ACCEPTED":
+        return "blue";
+      case "DELIVERED":
+        return "green";
+      default:
+        return "red";
+    }
+  };
   return (
     <Accordion
       width="100%"
@@ -22,15 +39,16 @@ export const ListAccordion = ({ data, activeOrder, setActiveOrder }) => {
       borderRadius={10}
       bg={"white"}
       allowMultiple
-      index={index}
+      index={index===-1? 0 : index}
       onChange={(index) => {
-        const selected = (data[index])
+        const selected = data[index];
         setActiveOrder(selected.id);
       }}
     >
       {data.map((elem) => {
         const date =
-          elem.createdAt && elem.createdAt.toDate().toLocaleDateString("en-gb");
+          elem.createdAt && elem.createdAt.toDate()
+        const dateString = date && `${date.toLocaleDateString("en-gb")} - ${date.toLocaleTimeString("en-gb")}`;
         const post = elem.postCode;
         const totalPrice =
           elem.food &&
@@ -49,10 +67,13 @@ export const ListAccordion = ({ data, activeOrder, setActiveOrder }) => {
                 <AccordionButton>
                   <Box flex="1" textAlign="left">
                     <Text>Deliver to: {post}</Text>
-                    <Text fontSize={"xs"}>{date}</Text>
+                    <Text fontSize={"sm"}>
+                      Deliver person location: unknown
+                    </Text>
+                    <Text fontSize={"xs"}>{dateString}</Text>
                     <Text fontSize={"xl"}>Total: £{totalPrice}</Text>
                   </Box>
-                  <Badge fontSize="lg" colorScheme={"band2"}>
+                  <Badge fontSize="lg" colorScheme={computeStatusColor(elem.status)}>
                     {elem.status}
                   </Badge>
                   <AccordionIcon />
@@ -66,9 +87,11 @@ export const ListAccordion = ({ data, activeOrder, setActiveOrder }) => {
                       {item.number}x {item.name} £{item.price}
                     </Text>
                   ))}
-                <Button my={4} colorScheme="blue">
-                  Accept & Allocate Delivery
-                </Button>
+                {roles === "restaurant manager" ? (
+                  <Button my={4} colorScheme="blue">
+                    Accept & Allocate Delivery
+                  </Button>
+                ) : null}
               </AccordionPanel>
             </AccordionItem>
           </Box>

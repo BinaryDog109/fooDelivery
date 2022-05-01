@@ -9,6 +9,9 @@ import {
   ListItem,
   MenuItem,
   ScaleFade,
+  Tab,
+  TabList,
+  Tabs,
   Text,
 } from "@chakra-ui/react";
 import { Icon } from "@chakra-ui/react";
@@ -23,7 +26,8 @@ import { CartPopup } from "./CartPopup";
 import { useUserContext } from "../../hooks/useUserContext";
 import { RestaurantListItem } from "./RestaurantListItem";
 import { useGetDocuments } from "../../hooks/useGetDocuments";
-import {CheckoutCart} from "./CheckoutCart"
+import { CheckoutCard } from "./CheckoutCard";
+import { ViewOrderCard } from "./ViewOrderCard";
 
 export const CustomerPage = ({ basePath = "/" }) => {
   const styles = useMemo(
@@ -49,31 +53,55 @@ export const CustomerPage = ({ basePath = "/" }) => {
       )}
       <Container p={2} style={styles} mt={5} borderRadius="md" boxShadow={"xl"}>
         {error && <div>{error}</div>}
-        <Switch>
-          <Route exact path={"/cus"}>
-            <ScaleFade in={true}>
-              <List>
-                {restaurants &&
-                  restaurants.map((restaurant) => (
-                    <Link key={restaurant.id} to={basePath + `/restaurants/${restaurant.id}`}>
-                      <ListItem borderRadius={"md"} _hover={{bg: "gray.200"}}
-                        className="restaurant-item"
-                        listStyleType={"none"}
+        <Tabs variant={"unstyled"}>
+          <TabList>
+            <Box borderRadius={"md"} _hover={{ bg: "gray.200" }}>
+              <Link to={basePath}>
+                <Tab>Restaurants</Tab>
+              </Link>
+            </Box>
+            <Box borderRadius={"md"} _hover={{ bg: "gray.200" }}>
+              <Link to={basePath + "/orders"}>
+                <Tab>My Orders</Tab>
+              </Link>
+            </Box>
+          </TabList>
+          <Divider></Divider>
+
+          <Switch>
+            <Route exact path={basePath}>
+              <ScaleFade in={true}>
+                <List>
+                  {restaurants &&
+                    restaurants.map((restaurant) => (
+                      <Link
+                        key={restaurant.id}
+                        to={basePath + `/restaurants/${restaurant.id}`}
                       >
-                        <RestaurantListItem data={restaurant} />
-                      </ListItem>
-                    </Link>
-                  ))}
-              </List>
-            </ScaleFade>
-          </Route>
-          <Route path={basePath + "/restaurants/:id"}>
-            <RestaurantCard></RestaurantCard>
-          </Route>
-          <Route path={basePath + "/checkout"}>
-            <CheckoutCart basePath={basePath} />
-          </Route>
-        </Switch>
+                        <ListItem
+                          borderRadius={"md"}
+                          _hover={{ bg: "gray.200" }}
+                          className="restaurant-item"
+                          listStyleType={"none"}
+                        >
+                          <RestaurantListItem data={restaurant} />
+                        </ListItem>
+                      </Link>
+                    ))}
+                </List>
+              </ScaleFade>
+            </Route>
+            <Route path={basePath + "/restaurants/:id"}>
+              <RestaurantCard></RestaurantCard>
+            </Route>
+            <Route path={basePath + "/checkout"}>
+              <CheckoutCard basePath={basePath} />
+            </Route>
+            <Route path={basePath + "/orders"}>
+              <ViewOrderCard basePath={basePath} />
+            </Route>
+          </Switch>
+        </Tabs>
       </Container>
     </>
   );
