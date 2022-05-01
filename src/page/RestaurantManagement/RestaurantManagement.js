@@ -13,7 +13,6 @@ import { useMemo } from "react";
 import { AddIcon } from "@chakra-ui/icons";
 import { useGetDocuments } from "../../hooks/useGetDocuments";
 import { useUserContext } from "../../hooks/useUserContext";
-import { Card } from "../../components/Card";
 import { ListAccordion } from "../../components/ListAccordion";
 import {RestaurantListDetail} from "./RestaurantListDetail";
 import {Route, Switch} from "react-router-dom";
@@ -137,6 +136,7 @@ export const RestaurantManagement = ({
                                             <List>
                                                 {restaurants &&
                                                 restaurants.map((restaurant) => {
+                                                    console.log("qwertyy",restaurant.id)
                                                     if (restaurant.status === "declined")
                                                         return(
                                                             <ListItem borderRadius={"md"} _hover={{bg: "gray.200"}}
@@ -148,6 +148,7 @@ export const RestaurantManagement = ({
                                                         )
                                                 })}
                                             </List>
+
                                         </TabPanel>
                                     </TabPanels>
                                 </ScaleFade>

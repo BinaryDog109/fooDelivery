@@ -2,10 +2,19 @@ import {chakra, Box, Center, Divider, Image, Text, Link, useDisclosure,} from "@
 import { Icon } from "@chakra-ui/react";
 import { HiOutlineLocationMarker, HiOutlineClock } from "react-icons/hi";
 import {RestaurantItemModal} from "./RestaurantItemModal";
+import { useRestaurant } from "../../hooks/useRetaurant";
 
 export const RestaurantListDetail = ({data, status}) => {
 
     const { isOpen, onOpen, onClose } = useDisclosure();
+    // const {restaurantInfo} = useRestaurant(restaurantId)
+
+    const Approve = (status, testaurant) => {
+
+    }
+    const Decline = (status, testaurant) => {
+
+    }
 
     return (
 
@@ -83,6 +92,7 @@ export const RestaurantListDetail = ({data, status}) => {
                         _focus={{
                         bg: "gray.400",
                     }}
+                        onClick={() => Approve("approved", data)}
                         >
                         Approve
                         </chakra.button>:null
@@ -106,6 +116,7 @@ export const RestaurantListDetail = ({data, status}) => {
                             _focus={{
                                 bg: "gray.400",
                             }}
+                            onClick={() => Decline("declined", data)}
                         >
                             decline
                         </chakra.button>:null
