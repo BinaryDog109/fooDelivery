@@ -6,6 +6,7 @@ import {
   DirectionsRenderer,
 } from "@react-google-maps/api";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useCRUD } from "../hooks/useCRUD";
 
 const libraries = ["places"];
 export const DisplayMap = ({ order = null, restaurant = null }) => {
@@ -13,79 +14,103 @@ export const DisplayMap = ({ order = null, restaurant = null }) => {
     googleMapsApiKey: process.env.REACT_APP_THE_KEY,
     libraries,
   });
+  const { updateDoc: updateOrder, response: orderResponse } = useCRUD("Orders");
 
   const [map, setMap] = useState(/** @type google.maps.Map */ (null));
   const [duration, setDuration] = useState(null);
   const [distance, setDistance] = useState(null);
   const [direction, setDirection] = useState(null);
   const [direction2, setDirection2] = useState(null);
-  const [orderlatLng, setOrderLatLng] = useState(null);
-  const [restaurantLatLng, setRestaurantLatLng] = useState(null);
+  const [orderCoordinates, setOrderCoordinates] = useState(null);
+  const [restaurantCoordinates, setRestaurantCoordinates] = useState(null);
   const [currentPos, setCurrentPos] = useState(null);
-  function getCurrentPosition() {
-    return new Promise((resolve, reject) => {
-      navigator.geolocation.getCurrentPosition(
-        (position) => resolve(position),
-        (error) => reject(error)
-      );
+  async function getCurrentPosition() {
+    return new Promise(async (res, rej) => {
+      const p = new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(
+          (position) => resolve(position),
+          (error) => reject(error)
+        );
+      });
+      const position = await p;
+      const positionlat = position.coords.latitude;
+      const positionlon = position.coords.longitude;
+      const currentCoordinate = { lat: positionlat, lng: positionlon };
+      res(currentCoordinate);
     });
   }
+  const getCoordinatesFromPostCode = (geocoder, postCode) => {
+    return new Promise(async (res, rej) => {
+      const { results } = await geocoder.geocode({ address: postCode });
+      const { lat, lng } = results[0].geometry.location;
+      const latitute = lat();
+      const longtitute = lng();
+      const coordinate = { lat: latitute, lng: longtitute };
+      res(coordinate);
+    });
+  };
+  const getDirection = (service, origin, destination) => {
+    return new Promise(async (res, rej) => {
+      const directionResults = await service.route({
+        origin,
+        destination,
+        // eslint-disable-next-line no-undef
+        travelMode: google.maps.TravelMode.BICYCLING,
+      });
+      res(directionResults);
+    });
+  };
   const _setPositionsAndDirection = async (orderAdress, restaurantAddress) => {
-    console.log("render map runs")
-    const position = await getCurrentPosition();
-    const positionlat = position.coords.latitude;
-    const positionlon = position.coords.longitude;
-    const currentCoordinate = { lat: positionlat, lng: positionlon };
+    const currentCoordinate = await getCurrentPosition();
     setCurrentPos(currentCoordinate);
     // Fetch geo coordinates from post codes
     // eslint-disable-next-line no-undef
     const geocoder = new google.maps.Geocoder();
-    const { results } = await geocoder.geocode({ address: orderAdress });
-    const { lat, lng } = results[0].geometry.location;
-    const latitute = lat();
-    const longtitute = lng();
-    const customerCoordinate = { lat: latitute, lng: longtitute };
-    setOrderLatLng(customerCoordinate);
+    const customerCoordinate = await getCoordinatesFromPostCode(
+      geocoder,
+      orderAdress
+    );
+    setOrderCoordinates(customerCoordinate);
     let restaurantCoordinate;
     // If you also provided restaurant postCode
     if (restaurantAddress) {
-      const { results } = await geocoder.geocode({
-        address: restaurantAddress,
-      });
-      const { lat, lng } = results[0].geometry.location;
-      const latitute = lat();
-      const longtitute = lng();
-      restaurantCoordinate = { lat: latitute, lng: longtitute };
-      setRestaurantLatLng(restaurantCoordinate);
+      restaurantCoordinate = await getCoordinatesFromPostCode(
+        geocoder,
+        restaurantAddress
+      );
+      setRestaurantCoordinates(restaurantCoordinate);
     }
     // Fetch direction
     // eslint-disable-next-line no-undef
     const service = new google.maps.DirectionsService();
-    const directionResults = await service.route({
-      origin: currentCoordinate,
-      destination: customerCoordinate,
-      // eslint-disable-next-line no-undef
-      travelMode: google.maps.TravelMode.BICYCLING,
-    });
-    setDirection(directionResults);
-    if (restaurant) {
-      const resDirectionResults = await service.route({
-        origin: currentCoordinate,
-        destination: restaurantCoordinate,
-        // eslint-disable-next-line no-undef
-        travelMode: google.maps.TravelMode.BICYCLING,
-      });
-      setDirection2(resDirectionResults);
+    const currentPositionToCustomerPosition = await getDirection(
+      service,
+      currentCoordinate,
+      customerCoordinate
+    );
+    setDirection(currentPositionToCustomerPosition);
+    if (restaurantAddress) {
+      const currentPositionToRestaurantPosition = await getDirection(
+        service,
+        currentCoordinate,
+        restaurantCoordinate
+      );
+      setDirection2(currentPositionToRestaurantPosition);
     }
   };
+  // Cache this function. Otherwise it will exceed render limit.
   const setPositionsAndDirection = useRef(_setPositionsAndDirection).current;
+  // Cache these two objects to avoid unneccesary rerender.
+  const cachedOrder = useRef(order).current;
+  const cachedRestaurant = useRef(restaurant).current;
   //=========================================
 
   useEffect(() => {
+    console.log("effect runs");
     if (map) {
-      setPositionsAndDirection(order.postCode, restaurant.postCode);
+      setPositionsAndDirection(cachedOrder.postCode, cachedRestaurant.postCode);
     }
-  }, [map, order, restaurant, setPositionsAndDirection]);
+  }, [map, cachedOrder, cachedRestaurant, setPositionsAndDirection]);
 
   if (!isLoaded) return <SkeletonText></SkeletonText>;
   return (
