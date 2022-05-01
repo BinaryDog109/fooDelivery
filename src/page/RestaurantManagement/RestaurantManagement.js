@@ -45,7 +45,7 @@ export const RestaurantManagement = ({
                 {error && <p>{error}</p>}
                 {orderError && <p>{orderError}</p>}
 
-                <RestaurantItemModal isOpen={isOpen} onClose={onClose} onOpen={onOpen} />
+                {/*<RestaurantItemModal isOpen={isOpen} onClose={onClose} onOpen={onOpen} />*/}
                 <Tabs
                     index={tabIndex}
                     onChange={setTabIndex}
@@ -65,17 +65,18 @@ export const RestaurantManagement = ({
                     >
                         <Tab color={tabListTextColor}>wait for approval</Tab>
                         <Tab color={tabListTextColor}>approved</Tab>
-                        {tabIndex === 0 ? (
-                            <Button
-                                ml={"auto"}
-                                leftIcon={<AddIcon />}
-                                colorScheme="yellow"
-                                variant="solid"
-                                onClick={onOpen}
-                            >
-                                Add
-                            </Button>
-                        ) : null}
+                        <Tab color={tabListTextColor}>declined</Tab>
+                        {/*{tabIndex === 0 ? (*/}
+                        {/*    <Button*/}
+                        {/*        ml={"auto"}*/}
+                        {/*        leftIcon={<AddIcon />}*/}
+                        {/*        colorScheme="yellow"*/}
+                        {/*        variant="solid"*/}
+                        {/*        onClick={onOpen}*/}
+                        {/*    >*/}
+                        {/*        Add*/}
+                        {/*    </Button>*/}
+                        {/*) : null}*/}
                     </TabList>
                     <TabPanels pt={5} mb={yOffset}>
                         <TabPanel p={0}>
