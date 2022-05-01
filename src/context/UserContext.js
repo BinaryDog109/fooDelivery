@@ -5,14 +5,15 @@ export const UserContext = createContext();
 
 export const UserContextProvider = ({ children }) => {
   const id = "jqujejy9RKZCYLILWq6V"; // User Auth Id
-
+  // A hard-coded delivery person id
+  const deliveryId = "3teqWWAAhZQjzyd0AAYJ"
   const { getDoc, updateDoc: updateUser, response } = useCRUD("Users");
   // Get user's info
   // Todo: After a user has signed up, create a cart for the user
   useEffect(() => {
-    getDoc(id);
+    getDoc(deliveryId);
   }, [getDoc]);
-  const context = {id, updateUser, response }
+  const context = {deliveryId, id, updateUser, response }
   // Restaurant manager context
   // const id = "Mbsj4jfzNKIfoT2KKPPJ";
   // const { docs: orders, error: orderError } = useGetDocuments(
