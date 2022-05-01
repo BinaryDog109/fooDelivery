@@ -9,6 +9,7 @@ import {
   Text,
   Button,
 } from "@chakra-ui/react";
+import { MapModal } from "./MapModal";
 export const ListAccordion = ({
   data,
   activeOrder,
@@ -92,6 +93,8 @@ export const ListAccordion = ({
                     Accept & Allocate Delivery
                   </Button>
                 ) : null}
+                {/* Maps Dialog */}
+                  <MapModal />
               </AccordionPanel>
             </AccordionItem>
           </Box>
