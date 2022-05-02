@@ -14,7 +14,8 @@ export const HighModal = ({
   isOpen,
   onClose,
   onOpen,
-  children
+  children,
+  title="title"
 }) => {
   return (
     <>
@@ -29,7 +30,7 @@ export const HighModal = ({
       >
         <ModalOverlay />
         <ModalContent maxH={"100%"}>
-          <ModalHeader>Modal Title</ModalHeader>
+          <ModalHeader>{title}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             {children}

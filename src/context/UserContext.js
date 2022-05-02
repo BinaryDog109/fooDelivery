@@ -1,5 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { useCRUD } from "../hooks/useCRUD";
+import { useGetDocuments } from "../hooks/useGetDocuments";
+import { useRestaurant } from "../hooks/useRetaurant";
 
 export const UserContext = createContext();
 
@@ -26,10 +28,13 @@ export const UserContextProvider = ({ children }) => {
   //   ["restaurantId", "==", id],
   //   ["createdAt", "desc"]
   // );
-  // const context = {id, orders, orderError}
-  return (
+  // const {restaurantInfo} = useRestaurant(id)
+  // const context = {id, orders, orderError, restaurantInfo}
+  // return restaurantInfo && (
+    return (
     <UserContext.Provider value={{ ...context }}>
       {response.error}
+      {/* {orderError} */}
       {children}
     </UserContext.Provider>
   );

@@ -31,7 +31,6 @@ export const DeliveryPersonPage = ({ basePath }) => {
     "==",
     "Paid",
   ]);
-  console.log(docs);
   return (
     <>
       {useMemo(

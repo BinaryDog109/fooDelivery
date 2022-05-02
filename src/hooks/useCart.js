@@ -6,6 +6,5 @@ export const useCart = () => {
   const { document: userInfo } = response;
   const { success, error, isPending } = response;
   const cart = userInfo && userInfo.cart;
-
   return { userId: id, cart, success, error, isPending, updateUser };
 };

@@ -44,7 +44,7 @@ export const FoodItemModal = ({ data, isOpen, onClose, onOpen }) => {
   }, [response.success, initFoodInfo, toast, onClose]);
   return (
     <>
-      <HighModal
+      <HighModal title={foodInfo.name}
         ActionButtons={
           <>
             <Button

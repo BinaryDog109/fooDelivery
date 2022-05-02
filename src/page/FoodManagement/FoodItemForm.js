@@ -8,7 +8,11 @@ import {
   Text,
   FormControl,
   FormLabel,
+  useToast,
 } from "@chakra-ui/react";
+import { useCRUD } from "../../hooks/useCRUD";
+import { useUserContext } from "../../hooks/useUserContext";
+import { useEffect } from "react";
 import styles from "./FoodItemForm.module.css";
 
 export const FoodItemForm = ({
@@ -20,6 +24,16 @@ export const FoodItemForm = ({
   deleteDoc,
   updateDoc,
 }) => {
+  const { orders, restaurantInfo } = useUserContext();
+  const purchasedUsers = orders.map((order) => ({ userId: order.uid }));
+  const uniqPurchasedUsers = purchasedUsers.filter(
+    (v, i, a) => a.findIndex((v2) => v2.userId === v.userId) === i
+  );
+  const usersAndHasRead = uniqPurchasedUsers.map((elem) => ({
+    id: elem.userId,
+    hasRead: false,
+  }));
+  const { addDoc: addNotification, response } = useCRUD("Notification");
   const handleChange = (event) => {
     if (typeof event === "string") {
       setFoodInfo((prev) => ({ ...prev, price: event }));
@@ -40,17 +54,36 @@ export const FoodItemForm = ({
     }
     // Update doc
     else {
-      console.log("will update...")
+      console.log("will update...");
       updateDoc(foodId, {
         ...foodInfo,
-        uid
-      })
+        uid,
+      });
+      addNotification({
+        content: `${foodInfo.name} from the ${restaurantInfo.name} has changed!`,
+        users: usersAndHasRead,
+      });
     }
   };
-  
+  // Check if successs
+  const toast = useToast();
+  useEffect(() => {
+    if (response.success) {
+      toast({
+        title: "Notification added.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  }, [response.success, toast]);
+
   return (
     <>
-      <form onSubmit={(event) => handleSubmit(event, foodId)} id="food-item-form">
+      <form
+        onSubmit={(event) => handleSubmit(event, foodId)}
+        id="food-item-form"
+      >
         <Image
           className={styles.image}
           src="https://images.unsplash.com/photo-1612927601601-6638404737ce?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"

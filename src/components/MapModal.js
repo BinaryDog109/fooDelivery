@@ -41,7 +41,7 @@ export const MapModal = ({ order }) => {
                   customerPostCode={customerPostCode}
                 />
               ) : (
-                "Waiting to fetch delivery person's location..."
+                "Waiting to fetch delivery person's location or the food has been delivered"
               )}
             </Box>
           </ModalBody>
