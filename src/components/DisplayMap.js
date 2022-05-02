@@ -1,4 +1,4 @@
-import { Heading, SkeletonText, Text } from "@chakra-ui/react";
+import { Badge, Box, Heading, SkeletonText, Text } from "@chakra-ui/react";
 import {
   GoogleMap,
   Marker,
@@ -117,6 +117,7 @@ export const DisplayMap = ({ order = null, restaurant = null, orderId }) => {
       );
 
       currentCoordinatePromise.then((currentCoordinate) => {
+        // Every time userWantsToUpdate field changes in the backend, update delivery person's location
         updateOrder(orderId, {
           deliveryLocation: { ...currentCoordinate },
         });
@@ -135,30 +136,46 @@ export const DisplayMap = ({ order = null, restaurant = null, orderId }) => {
   if (!isLoaded) return <SkeletonText></SkeletonText>;
   return (
     <>
-      {/* <Heading fontSize={"lg"}>
-        {" "}
-        {direction &&
-          `Your food is just ${direction.routes[0].legs[0].distance.text} away!`}
-      </Heading> */}
-      <GoogleMap
-        mapContainerStyle={{ width: "100%", height: "100%" }}
-        zoom={12}
-        center={currentPos}
-        // eslint-disable-next-line no-undef
-        onLoad={(map) => {
-          setMap(map);
-        }}
-      >
-        {direction && <DirectionsRenderer directions={direction} />}
-        {direction2 && <DirectionsRenderer directions={direction2} />}
-        {currentPos && (
-          <Marker
-            position={currentPos}
-          ></Marker>
+      <Box mb={2} textAlign={"left"}>
+        {direction && (
+          <Heading fontSize={"lg"}>
+            {`The customer(${order.postCode}) is`}{" "}
+            <Badge
+              fontSize={"lg"}
+              colorScheme="green"
+              variant={"solid"}
+            >{`${direction.routes[0].legs[0].distance.text}`}</Badge>{" "}
+            {`away!`}
+          </Heading>
         )}
-        {/* {orderlatLng && <Marker position={orderlatLng}></Marker>}
+        {direction2 && (
+          <Heading fontSize={"lg"}>
+            {`${restaurant.name}(${restaurant.postCode}) is`}{" "}
+            <Badge
+              fontSize={"lg"}
+              colorScheme="purple"
+            >{`${direction2.routes[0].legs[0].distance.text}`}</Badge>{" "}
+            {`away!`}
+          </Heading>
+        )}
+      </Box>
+      <Box height={350}>
+        <GoogleMap
+          mapContainerStyle={{ width: "100%", height: "100%" }}
+          zoom={12}
+          center={currentPos}
+          // eslint-disable-next-line no-undef
+          onLoad={(map) => {
+            setMap(map);
+          }}
+        >
+          {direction && <DirectionsRenderer directions={direction} />}
+          {direction2 && <DirectionsRenderer directions={direction2} />}
+          {currentPos && <Marker position={currentPos}></Marker>}
+          {/* {orderlatLng && <Marker position={orderlatLng}></Marker>}
         {restaurantLatLng && <Marker position={restaurantLatLng}></Marker>} */}
-      </GoogleMap>
+        </GoogleMap>
+      </Box>
     </>
   );
 };

@@ -1,6 +1,7 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Button, Divider } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { DisplayMap } from "../../components/DisplayMap";
+import { MyThemeButton } from "../../components/MyThemeButton";
 import { useCRUD } from "../../hooks/useCRUD";
 import { useUserContext } from "../../hooks/useUserContext";
 export const OrderTrackingCard = () => {
@@ -36,13 +37,15 @@ export const OrderTrackingCard = () => {
     alreadyHasRestaurant && restaurantResponse.document && (
       <>
         Here is your active order:
-        <Box height={300}>
+        <Box>
           <DisplayMap
             order={orderResponse.document}
             restaurant={restaurantResponse.document}
             orderId={alreadyhasOrder}
           />
         </Box>
+        <Divider></Divider>
+        <MyThemeButton size={"sm"} mt={2}>Confirm Food Delivered</MyThemeButton>
       </>
     )
   );

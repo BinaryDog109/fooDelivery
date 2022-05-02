@@ -33,7 +33,7 @@ export const MapModal = ({ order }) => {
           <ModalHeader>Track Your Food</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Box minHeight={300} height={500}>
+            <Box>
               {deliveryLocation ? (
                 <CustomerDisplayMap
                   deliveryLat={deliveryLocation.lat}

@@ -1,4 +1,4 @@
-import { Heading, SkeletonText, Text } from "@chakra-ui/react";
+import { Badge, Box, Heading, SkeletonText, Text } from "@chakra-ui/react";
 import {
   GoogleMap,
   useJsApiLoader,
@@ -61,32 +61,47 @@ export const CustomerDisplayMap = ({
   // Cache this function. Otherwise it will exceed render limit.
   const setPositionsAndDirection = useRef(_setPositionsAndDirection).current;
   useEffect(() => {
-      if (map) {
-          console.log("customer map to be refreshed")
-          setPositionsAndDirection();
-      }
-    
+    if (map) {
+      console.log("customer map to be refreshed");
+      setPositionsAndDirection();
+    }
   }, [map, setPositionsAndDirection, deliveryLat, deliveryLng]);
 
   if (!isLoaded) return <SkeletonText></SkeletonText>;
   return (
     <>
-      <Heading fontSize={"lg"}>
-        {" "}
-        {direction &&
-          `Your food is just ${direction.routes[0].legs[0].distance.text} away!`}
-      </Heading>
-      <GoogleMap
-        mapContainerStyle={{ width: "100%", height: "100%" }}
-        zoom={12}
-        center={customerPos}
-        // eslint-disable-next-line no-undef
-        onLoad={(map) => {
-          setMap(map);
-        }}
-      >
+      {direction && (
+        <Box textAlign={"left"}>
+          <Heading fontSize={"lg"}>
+            {`Your food is`}{" "}
+            <Badge
+              fontSize={"lg"}
+              colorScheme="green"
+            >{`${direction.routes[0].legs[0].distance.text}`}</Badge>{" "}
+            {`away!`}
+          </Heading>
+          <Heading>
+            Estimated Time:{" "}
+            <Badge
+              fontSize={"lg"}
+              colorScheme="red"
+            >{`${direction.routes[0].legs[0].duration.text}`}</Badge>
+          </Heading>
+        </Box>
+      )}
+      <Box height={500}>
+        <GoogleMap
+          mapContainerStyle={{ width: "100%", height: "100%" }}
+          zoom={12}
+          center={customerPos}
+          // eslint-disable-next-line no-undef
+          onLoad={(map) => {
+            setMap(map);
+          }}
+        >
           {direction && <DirectionsRenderer directions={direction} />}
-      </GoogleMap>
+        </GoogleMap>
+      </Box>
     </>
   );
 };
