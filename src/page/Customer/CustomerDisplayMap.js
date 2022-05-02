@@ -3,6 +3,7 @@ import {
   GoogleMap,
   useJsApiLoader,
   DirectionsRenderer,
+  Marker,
 } from "@react-google-maps/api";
 import { useEffect, useRef, useState } from "react";
 
@@ -19,6 +20,7 @@ export const CustomerDisplayMap = ({
   const [map, setMap] = useState(/** @type google.maps.Map */ (null));
   const [direction, setDirection] = useState(null);
   const [customerPos, setCustomerPos] = useState(null);
+  const [deliveryPos, setDeliveryPos] = useState(null)
   const getCoordinatesFromPostCode = (geocoder, postCode) => {
     return new Promise(async (res, rej) => {
       const { results } = await geocoder.geocode({ address: postCode });
@@ -51,6 +53,7 @@ export const CustomerDisplayMap = ({
     );
     setCustomerPos(customerCoords);
     const deliveryCoords = { lat: deliveryLat, lng: deliveryLng };
+    setDeliveryPos(deliveryCoords)
     const direction = await getDirection(
       service,
       customerCoords,
@@ -100,6 +103,8 @@ export const CustomerDisplayMap = ({
           }}
         >
           {direction && <DirectionsRenderer directions={direction} />}
+          <Marker position={deliveryPos} />
+          <Marker position={customerPos} />
         </GoogleMap>
       </Box>
     </>

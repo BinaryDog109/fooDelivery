@@ -64,7 +64,7 @@ export const NotificationPopup = () => {
                 bg="red.600"
                 rounded="full"
               >
-                {docs.length}
+                {docs && docs.length}
               </chakra.span>
             </>
           }
