@@ -1,4 +1,5 @@
 import firebase from 'firebase/compat/app';
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 
@@ -21,4 +22,4 @@ const projectFirestore = firebase.firestore()
 // timestamp
 const timestamp = firebase.firestore.Timestamp
 
-export {projectAuth, projectFirestore, timestamp}
+export {projectAuth, projectFirestore, timestamp, getStorage, ref, uploadBytesResumable, getDownloadURL}
