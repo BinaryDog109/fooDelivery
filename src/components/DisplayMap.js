@@ -9,7 +9,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useCRUD } from "../hooks/useCRUD";
 
 const libraries = ["places"];
-export const DisplayMap = ({ order = null, restaurant = null }) => {
+export const DisplayMap = ({ order = null, restaurant = null, orderId }) => {
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_THE_KEY,
     libraries,
@@ -97,20 +97,40 @@ export const DisplayMap = ({ order = null, restaurant = null }) => {
       );
       setDirection2(currentPositionToRestaurantPosition);
     }
+    return currentCoordinate;
   };
   // Cache this function. Otherwise it will exceed render limit.
   const setPositionsAndDirection = useRef(_setPositionsAndDirection).current;
-  // Cache these two objects to avoid unneccesary rerender.
+  // Cache these two objects to avoid the same problem (tested).
   const cachedOrder = useRef(order).current;
   const cachedRestaurant = useRef(restaurant).current;
+
   //=========================================
 
   useEffect(() => {
-    console.log("effect runs");
+    // this if statement was to prevent "google is not defined"
     if (map) {
-      setPositionsAndDirection(cachedOrder.postCode, cachedRestaurant.postCode);
+      console.log("map to be refreshed!");
+      const currentCoordinatePromise = setPositionsAndDirection(
+        cachedOrder.postCode,
+        cachedRestaurant.postCode
+      );
+
+      currentCoordinatePromise.then((currentCoordinate) => {
+        updateOrder(orderId, {
+          deliveryLocation: { ...currentCoordinate },
+        });
+      });
     }
-  }, [map, cachedOrder, cachedRestaurant, setPositionsAndDirection]);
+  }, [
+    map,
+    cachedOrder,
+    cachedRestaurant,
+    setPositionsAndDirection,
+    order.userWantsToUpdate,
+    orderId,
+    updateOrder,
+  ]);
 
   if (!isLoaded) return <SkeletonText></SkeletonText>;
   return (
@@ -131,8 +151,12 @@ export const DisplayMap = ({ order = null, restaurant = null }) => {
       >
         {direction && <DirectionsRenderer directions={direction} />}
         {direction2 && <DirectionsRenderer directions={direction2} />}
-        {/* {currentPos && <Marker position={currentPos}></Marker>}
-        {orderlatLng && <Marker position={orderlatLng}></Marker>}
+        {currentPos && (
+          <Marker
+            position={currentPos}
+          ></Marker>
+        )}
+        {/* {orderlatLng && <Marker position={orderlatLng}></Marker>}
         {restaurantLatLng && <Marker position={restaurantLatLng}></Marker>} */}
       </GoogleMap>
     </>

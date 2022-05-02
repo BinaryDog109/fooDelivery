@@ -45,5 +45,5 @@ export const ViewOrderCard = ({ basePath }) => {
         </ScaleFade>
       </>
     );
-  }, [orders, tabIndex]);
+  }, [orders, tabIndex, basePath, history]);
 };

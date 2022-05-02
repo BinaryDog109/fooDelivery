@@ -23,7 +23,7 @@ export const OrderCard = ({ data }) => {
     const batch = projectFirestore.batch();
     const orderRef = projectFirestore.collection("Orders").doc(data.id);
     batch.update(orderRef, {
-      status: "Paid",
+      status: "Accepted",
       deliverBy: deliveryId,
       updatedAt,
     });

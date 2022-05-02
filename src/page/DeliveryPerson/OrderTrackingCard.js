@@ -40,6 +40,7 @@ export const OrderTrackingCard = () => {
           <DisplayMap
             order={orderResponse.document}
             restaurant={restaurantResponse.document}
+            orderId={alreadyhasOrder}
           />
         </Box>
       </>

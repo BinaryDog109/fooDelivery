@@ -94,7 +94,7 @@ export const ListAccordion = ({
                   </Button>
                 ) : null}
                 {/* Maps Dialog */}
-                  <MapModal />
+                  <MapModal order={elem}/>
               </AccordionPanel>
             </AccordionItem>
           </Box>

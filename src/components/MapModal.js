@@ -10,15 +10,22 @@ import {
   useDisclosure,
   Box,
 } from "@chakra-ui/react";
-import { DisplayMap } from "./DisplayMap";
+import { useCRUD } from "../hooks/useCRUD";
+import { CustomerDisplayMap } from "../page/Customer/CustomerDisplayMap";
 
-export const MapModal = () => {
+export const MapModal = ({ order }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  
-
+  const { deliveryLocation, postCode: customerPostCode } = order;
+  const { updateDoc, response } = useCRUD("Orders");
+  const handleOnOpen = (e) => {
+    onOpen(e);
+    updateDoc(order.id, {
+      userWantsToUpdate: !order.userWantsToUpdate,
+    });
+  };
   return (
     <>
-      <Button onClick={onOpen}>Track location</Button>
+      <Button onClick={handleOnOpen}>Track location</Button>
 
       <Modal size={"xl"} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -27,7 +34,15 @@ export const MapModal = () => {
           <ModalCloseButton />
           <ModalBody>
             <Box minHeight={300} height={500}>
-              <DisplayMap />
+              {deliveryLocation ? (
+                <CustomerDisplayMap
+                  deliveryLat={deliveryLocation.lat}
+                  deliveryLng={deliveryLocation.lng}
+                  customerPostCode={customerPostCode}
+                />
+              ) : (
+                "Waiting to fetch delivery person's location..."
+              )}
             </Box>
           </ModalBody>
 

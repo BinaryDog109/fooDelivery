@@ -4,7 +4,8 @@ import { useCRUD } from "../hooks/useCRUD";
 export const UserContext = createContext();
 
 export const UserContextProvider = ({ children }) => {
-  const id = "jqujejy9RKZCYLILWq6V"; // User Auth Id
+  // const id = "jqujejy9RKZCYLILWq6V"; // User Auth Id
+  const id = "3teqWWAAhZQjzyd0AAYJ" // User Auth Id 2 (to test delivery)
   // A hard-coded delivery person id
   const deliveryId = "3teqWWAAhZQjzyd0AAYJ"
   const { getDoc, updateDoc: updateUser, response } = useCRUD("Users");
