@@ -28,6 +28,7 @@ import { RestaurantListItem } from "./RestaurantListItem";
 import { useGetDocuments } from "../../hooks/useGetDocuments";
 import { CheckoutCard } from "./CheckoutCard";
 import { ViewOrderCard } from "./ViewOrderCard";
+import { NotificationPopup } from "./NotificationPopup";
 
 export const CustomerPage = ({ basePath = "/" }) => {
   const styles = useMemo(
@@ -47,6 +48,7 @@ export const CustomerPage = ({ basePath = "/" }) => {
         () => (
           <Navbar>
             <CartPopup basePath={basePath} />
+            <NotificationPopup basePath={basePath} />
           </Navbar>
         ),
         [basePath]

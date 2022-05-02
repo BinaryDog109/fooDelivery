@@ -38,7 +38,6 @@ const storeReducer = (state, action) => {
         isPending: false,
         success: "updated",
         error: null,
-        ...state,
       };
     case "DELETED_DOCUMENT":
       return {
@@ -76,7 +75,8 @@ export const useCRUD = (collection, id, subCollection) => {
   }
 
   const dispatchIfNotAborted = (action) => {
-    if (!hasAborted) dispatch(action);
+    
+    if (!hasAborted) { dispatch(action) };
   };
 
   const _addDoc = async (doc) => {

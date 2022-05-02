@@ -60,7 +60,6 @@ export const CartPopup = ({basePath}) => {
     }
     updateUser(userId, { cart });
   };
-
   return (
     <Popover>
       <PopoverTrigger>
