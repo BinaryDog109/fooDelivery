@@ -76,6 +76,7 @@ export const FoodItemModal = ({ data, isOpen, onClose, onOpen }) => {
           uid={id}
           addDoc={addDoc}
           updateDoc={updateDoc}
+          foodCollectionResponse = {response}
           setFoodInfo={setFoodInfo}
           foodInfo={foodInfo}
         />

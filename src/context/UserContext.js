@@ -10,6 +10,7 @@ export const UserContextProvider = ({ children }) => {
   // // const id = "Rnel0gMCSsIf8OGX0KZ4"
   // const id = "Rnel0gMCSsIf8OGX0KZ4" // User Auth Id 2 (to test delivery)
   // // A hard-coded delivery person id
+  // create a hasOrder field after a driver signs up
   // const deliveryId = "3teqWWAAhZQjzyd0AAYJ"
   // const { getDoc, updateDoc: updateUser, response } = useCRUD("Users");
   // // Get user's info

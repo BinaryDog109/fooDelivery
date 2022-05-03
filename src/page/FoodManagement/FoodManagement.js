@@ -13,8 +13,8 @@ import { useMemo } from "react";
 import { AddIcon } from "@chakra-ui/icons";
 import { useGetDocuments } from "../../hooks/useGetDocuments";
 import { useUserContext } from "../../hooks/useUserContext";
-import { Card } from "../../components/Card";
-import { ListAccordion } from "../../components/ListAccordion";
+import { FoodCard } from "./FoodCard";
+import { OrderListAccordion } from "../../components/OrderListAccordion";
 
 export const FoodManagement = ({
   tabIndex,
@@ -79,11 +79,11 @@ export const FoodManagement = ({
           </TabList>
           <TabPanels pt={5} mb={yOffset}>
             <TabPanel p={0}>
-              {docs && <ItemGrid data={docs} Card={Card} />}
+              {docs && <ItemGrid data={docs} Card={FoodCard} />}
             </TabPanel>
             <TabPanel p={0}>
               {orders && (
-                <ListAccordion
+                <OrderListAccordion
                   data={orders}
                   activeOrder={activeOrder}
                   setActiveOrder={setActiveOrder}

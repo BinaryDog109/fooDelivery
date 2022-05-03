@@ -9,15 +9,14 @@ import {
   Button,
 } from "@chakra-ui/react";
 import styles from "./Card.module.css";
-import { FoodItemModal } from "../page/FoodManagement/FoodItemModal";
-import { useCRUD } from "../hooks/useCRUD";
-import { useUserContext } from "../hooks/useUserContext";
+import { FoodItemModal } from "./FoodItemModal";
+import { useCRUD } from "../../hooks/useCRUD";
+import { useUserContext } from "../../hooks/useUserContext";
 import { useEffect, useRef } from "react";
-import { OperationAlertDialog } from "./OperationAlertDialog";
+import { OperationAlertDialog } from "../../components/OperationAlertDialog";
 
-export const Card = ({ data }) => {
+export const FoodCard = ({ data }) => {
   // Toggle the Modal
-
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isDeleteDialogOpen,
@@ -43,6 +42,14 @@ export const Card = ({ data }) => {
       onDeleteDialogClose();
     }
   }, [response.success, toast, onDeleteDialogClose]);
+  const defaultImageUrl = "/img/food-unsplash.jpg";
+  // Compare time difference between creation time and now
+  const createdAt = data.createdAt;
+  const createdDifference = (Date.now() / 1000) - (createdAt? createdAt.seconds : 0);
+  const updatedAt = data.updatedAt;
+  const updatedDifference = (Date.now() / 1000) - (updatedAt? updatedAt.seconds : 0);
+  const createdLessThanFiveDays = createdDifference <= (5 * 86400)
+  const updatedLessThanOneDays = updatedDifference <= (1 * 86400)
 
   return (
     <div className={styles["food-card"]}>
@@ -80,7 +87,6 @@ export const Card = ({ data }) => {
         }}
         shadow={"md"}
         bg={"gray.50"}
-        
         borderWidth="1px"
         borderRadius="lg"
         overflow="hidden"
@@ -100,27 +106,18 @@ export const Card = ({ data }) => {
             width={"100%"}
             objectFit="cover"
             objectPosition={"center"}
-            src={
-              "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=999&q=80"
-            }
+            src={data.imagetoken || defaultImageUrl}
             alt={"A Food Photo"}
           />
         </Box>
         <Box p="6">
           <Box display="flex" alignItems="baseline">
-            <Badge borderRadius="full" px="2" colorScheme="teal">
-              New
+            <Badge mr={2} borderRadius="full" px="2" colorScheme="teal">
+              {createdLessThanFiveDays? "New": null}
             </Badge>
-            <Box
-              color="gray.500"
-              fontWeight="semibold"
-              letterSpacing="wide"
-              fontSize="xs"
-              textTransform="uppercase"
-              ml="2"
-            >
-              Allergen: Unavailable
-            </Box>
+            <Badge mr={2} borderRadius="full" px="2" colorScheme="purple">
+              {updatedLessThanOneDays? "Updated": null}
+            </Badge>
           </Box>
 
           <Box

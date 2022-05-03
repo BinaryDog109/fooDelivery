@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { ListAccordion } from "../../components/ListAccordion";
+import { OrderListAccordion } from "../../components/OrderListAccordion";
 import { useGetDocuments } from "../../hooks/useGetDocuments";
 import { useUserContext } from "../../hooks/useUserContext";
 import { Box, Heading, ScaleFade } from "@chakra-ui/react";
@@ -35,7 +35,7 @@ export const ViewOrderCard = ({ basePath }) => {
           </Heading>
 
           {orders && (
-            <ListAccordion
+            <OrderListAccordion
               data={orders}
               activeOrder={tabIndex}
               setActiveOrder={setTabIndex}

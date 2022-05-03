@@ -10,11 +10,12 @@ import {
   FormLabel,
   useToast,
   Box,
+  Spinner,
 } from "@chakra-ui/react";
 import { useCRUD } from "../../hooks/useCRUD";
 import { useUserContext } from "../../hooks/useUserContext";
-import { useEffect } from "react";
-import styles from "./FoodItemForm.module.css";
+import { useEffect, useState } from "react";
+import "./FoodItemForm.css";
 import {
   getDownloadURL,
   getStorage,
@@ -30,9 +31,13 @@ export const FoodItemForm = ({
   foodId,
   deleteDoc,
   updateDoc,
+  foodCollectionResponse,
 }) => {
+  const defaultImageUrl = "/img/food-unsplash.jpg";
+  const [isImageUploading, setIsImageUploading] = useState(false);
   const { orders, restaurantInfo } = useUserContext();
   const purchasedUsers = orders.map((order) => ({ userId: order.uid }));
+  // Remove duplicates user ids
   const uniqPurchasedUsers = purchasedUsers.filter(
     (v, i, a) => a.findIndex((v2) => v2.userId === v.userId) === i
   );
@@ -87,23 +92,21 @@ export const FoodItemForm = ({
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     const storage = getStorage();
-    if(!file || file.type.indexOf("image") === -1) {
-      console.log("Please upload an image!")
-      return
+    if (!file || file.type.indexOf("image") === -1) {
+      console.log("Please upload an image!");
+      return;
     }
+    setIsImageUploading(true);
     // Create the file metadata
     /** @type {any} */
     const metadata = {
       contentType: "image/jpeg",
     };
-    // Upload file and metadata to the object 'images/mountains.jpg'
-    const storageRef = ref(storage, "images/" + file.name);
+    const storageRef = ref(storage, "images/food/" + foodId);
     const uploadTask = uploadBytesResumable(storageRef, file, metadata);
-    // Listen for state changes, errors, and completion of the upload.
     uploadTask.on(
       "state_changed",
       (snapshot) => {
-        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         console.log("Upload is " + progress + "% done");
@@ -119,7 +122,6 @@ export const FoodItemForm = ({
         }
       },
       (error) => {
-        // A full list of error codes is available at
         // https://firebase.google.com/docs/storage/web/handle-errors
         switch (error.code) {
           case "storage/unauthorized":
@@ -140,7 +142,11 @@ export const FoodItemForm = ({
       () => {
         // Upload completed successfully, now we can get the download URL
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          console.log("File available at", downloadURL);
+          setFoodInfo((prev) => ({
+            ...prev,
+            imagetoken: downloadURL,
+          }));
+          setIsImageUploading(false);
         });
       }
     );
@@ -153,10 +159,20 @@ export const FoodItemForm = ({
       >
         <Box>
           <label htmlFor="file-input">
-            <Image
-              className={styles.image}
-              src="https://images.unsplash.com/photo-1612927601601-6638404737ce?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"
-            />
+            <Box className="food-item-image-container">
+              {isImageUploading ? (
+                <Spinner />
+              ) : (
+                <Image
+                  className="food-item-image"
+                  // src="https://images.unsplash.com/photo-1612927601601-6638404737ce?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"
+                  src={foodInfo.imagetoken || defaultImageUrl}
+                />
+              )}
+              <Box className="food-item-image-text-box">
+                <Text fontSize={"xl"}>Click to upload a new image</Text>
+              </Box>
+            </Box>
           </label>
           <input
             style={{ display: "none" }}

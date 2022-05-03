@@ -12,6 +12,7 @@ import { projectFirestore } from "../firebase/config";
 export const useGetDocuments = (collection, id, subCollection, _query, _orderBy) => {
   const [error, setError] = useState(null);
   const [docs, setDocs] = useState(null);
+  const [isPending, setPending] = useState(false);
   const query = useRef(_query).current 
   const orderBy = useRef(_orderBy).current 
   useEffect(() => {
@@ -25,6 +26,7 @@ export const useGetDocuments = (collection, id, subCollection, _query, _orderBy)
     if (orderBy) {
       ref = ref.orderBy(...orderBy)
     }
+    setPending(true)
     const unsub = ref.onSnapshot(
       (snapShot) => {
         let results = [];
@@ -33,12 +35,13 @@ export const useGetDocuments = (collection, id, subCollection, _query, _orderBy)
         });
         setDocs(results);
         setError(null);
+        setPending(false)
       },
-      (err) => setError(err.message)
+      (err) => {setError(err.message); setPending(false)}
     );
 
     return () => unsub();
   }, [collection, id, subCollection, query, orderBy]);
 
-  return { docs, error };
+  return { docs, error, isPending };
 };
