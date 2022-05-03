@@ -3,17 +3,27 @@ import { Icon } from "@chakra-ui/react";
 import { HiOutlineLocationMarker, HiOutlineClock } from "react-icons/hi";
 import {RestaurantItemModal} from "./RestaurantItemModal";
 import { useRestaurant } from "../../hooks/useRetaurant";
-
+import { getDatabase, ref, onValue} from "firebase/database";
+import firebase from "firebase/compat/app";
+import {projectFirestore} from "../../firebase/config";
 export const RestaurantListDetail = ({data, status}) => {
 
     const { isOpen, onOpen, onClose } = useDisclosure();
-    // const {restaurantInfo} = useRestaurant(restaurantId)
+    // const {restaurantInfo} = useRestaurant(data.id)
 
-    const Approve = (status, testaurant) => {
-
+    const Approve = async () => {
+        const starCountRef = projectFirestore.collection('Restaurants').doc(data.id)
+        const res = await starCountRef.update({
+            status: "accepted",
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        })
     }
-    const Decline = (status, testaurant) => {
-
+    const Decline = async () => {
+        const starCountRef = projectFirestore.collection('Restaurants').doc(data.id)
+        const res = await starCountRef.update({
+            status: "declined",
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        })
     }
 
     return (
@@ -26,7 +36,7 @@ export const RestaurantListDetail = ({data, status}) => {
                         borderRadius="lg"
                         width={{ md: 40 }}
                         src={"https://bit.ly/2jYM25F"}
-                        alt="Woman paying for a purchase"
+                        alt="restaurant image"
                     />
                 </Box>
                 <Box textAlign={"left"} mt={{ base: 4, md: 0 }} ml={{ md: 6 }}>
@@ -92,7 +102,7 @@ export const RestaurantListDetail = ({data, status}) => {
                         _focus={{
                         bg: "gray.400",
                     }}
-                        onClick={() => Approve("approved", data)}
+                        onClick={() => Approve()}
                         >
                         Approve
                         </chakra.button>:null
@@ -116,7 +126,7 @@ export const RestaurantListDetail = ({data, status}) => {
                             _focus={{
                                 bg: "gray.400",
                             }}
-                            onClick={() => Decline("declined", data)}
+                            onClick={() => Decline()}
                         >
                             decline
                         </chakra.button>:null

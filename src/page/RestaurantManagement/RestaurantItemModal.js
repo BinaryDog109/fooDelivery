@@ -16,9 +16,39 @@ import { useCRUD } from "../../hooks/useCRUD";
 import { useUserContext } from "../../hooks/useUserContext";
 import { useGetDocuments } from "../../hooks/useGetDocuments";
 import { useEffect, useMemo, useState } from "react";
+import {projectFirestore} from "../../firebase/config";
+import firebase from "firebase/compat/app";
 // Wraps a HighModal and inserts a FoodItemForm
 export const RestaurantItemModal = ({ data, status, isOpen, onClose, onOpen }) => {
-    const [scrollBehavior, setScrollBehavior] = React.useState('inside')
+    const [scrollBehavior, setScrollBehavior] = React.useState('outside')
+
+    const Approve = async () => {
+        const starCountRef = projectFirestore.collection('Restaurants').doc(data.id)
+        const res = await starCountRef.update({
+            status: "accepted",
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        })
+    }
+    const Decline = async () => {
+        const starCountRef = projectFirestore.collection('Restaurants').doc(data.id)
+        const res = await starCountRef.update({
+            status: "declined",
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        })
+    }
+
+    // Handles the operations' response: resets the form if success, displays a toast
+    useEffect(() => {
+        if (response.success === "updated") {
+            toast({
+                title: "Food list updated.",
+                status: "success",
+                duration: 3000,
+                isClosable: true,
+            });
+            onClose()
+        }
+    }, [response.success, initFoodInfo, toast, onClose]);
 
     const btnRef = React.useRef()
     return (
@@ -39,7 +69,7 @@ export const RestaurantItemModal = ({ data, status, isOpen, onClose, onOpen }) =
                         mb={5}
                         mt={5}
                         src={"https://bit.ly/2jYM25F"}
-                        alt="Woman paying for a purchase"
+                        alt="restaurant image"
                     />
                     </Center>
                     <ModalCloseButton />
@@ -66,6 +96,7 @@ export const RestaurantItemModal = ({ data, status, isOpen, onClose, onOpen }) =
                                     _focus={{
                                         bg: "gray.400",
                                     }}
+                                    onClick={() => Approve()}
                                 >
                                     Approve
                                 </chakra.button> : null
@@ -90,6 +121,7 @@ export const RestaurantItemModal = ({ data, status, isOpen, onClose, onOpen }) =
                                     _focus={{
                                         bg: "gray.400",
                                     }}
+                                    onClick={() => Decline()}
                                 >
                                     decline
                                 </chakra.button> : null
