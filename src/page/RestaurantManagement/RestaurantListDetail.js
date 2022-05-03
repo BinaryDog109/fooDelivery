@@ -17,6 +17,7 @@ export const RestaurantListDetail = ({data, status}) => {
             status: "accepted",
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         })
+        window.location.reload(false);
     }
     const Decline = async () => {
         const starCountRef = projectFirestore.collection('Restaurants').doc(data.id)
@@ -24,6 +25,7 @@ export const RestaurantListDetail = ({data, status}) => {
             status: "declined",
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         })
+        window.location.reload(false);
     }
 
     return (

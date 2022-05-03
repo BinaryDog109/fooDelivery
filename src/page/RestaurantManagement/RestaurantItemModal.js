@@ -28,6 +28,7 @@ export const RestaurantItemModal = ({ data, status, isOpen, onClose, onOpen }) =
             status: "accepted",
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         })
+        window.location.reload(false);
     }
     const Decline = async () => {
         const starCountRef = projectFirestore.collection('Restaurants').doc(data.id)
@@ -35,20 +36,8 @@ export const RestaurantItemModal = ({ data, status, isOpen, onClose, onOpen }) =
             status: "declined",
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         })
+        window.location.reload(false);
     }
-
-    // Handles the operations' response: resets the form if success, displays a toast
-    useEffect(() => {
-        if (response.success === "updated") {
-            toast({
-                title: "Food list updated.",
-                status: "success",
-                duration: 3000,
-                isClosable: true,
-            });
-            onClose()
-        }
-    }, [response.success, initFoodInfo, toast, onClose]);
 
     const btnRef = React.useRef()
     return (
