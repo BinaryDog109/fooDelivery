@@ -38,7 +38,6 @@ export const OrderListAccordion = ({
         return "red";
     }
   };
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef();
   const [selected, setSelected] = useState(null);
   const [allocating, setAllocating] = useState(false);

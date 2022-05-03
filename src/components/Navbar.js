@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { SettingsIcon } from "@chakra-ui/icons";
-import { Text } from "@chakra-ui/react";
+import { Image, Text } from "@chakra-ui/react";
 
 import styles from "./Navbar.module.css";
 import { Box } from "@chakra-ui/react";
@@ -20,9 +20,7 @@ export const Navbar = ({  children }) => {
       className={styles.header}
     >
       <div className={styles.logo}>
-        {/* logo image */}
-        <Text fontSize={["1.5rem", "2rem"]} bgGradient='linear(to-r, band1.100, band2.600)'
-  bgClip='text'>D3l1ver00 </Text>
+        <Image w={170} src="/img/logo.svg" />
         {/* search bar */}
       </div>
       <nav className={styles.links}>

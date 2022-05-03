@@ -1,4 +1,4 @@
-import { Box, Radio, RadioGroup, Spinner, Stack } from "@chakra-ui/react";
+import { Box, Radio, RadioGroup, Spinner, Stack, Text } from "@chakra-ui/react";
 import { useState } from "react";
 import { useDelivery } from "../../hooks/useDelivery";
 export const AllocateDriverCard = ({selected, setSelected}) => {
@@ -16,7 +16,8 @@ export const AllocateDriverCard = ({selected, setSelected}) => {
             </Radio>
           ))}
           
-      </Stack>{!drivers || drivers.length === 0 ? "No available drivers at the moment" : null}
+      </Stack>
+      <Text fontWeight={"600"}>{!drivers || drivers.length === 0 ? "No available drivers at the moment" : null}</Text>
     </RadioGroup>
   );
 };
