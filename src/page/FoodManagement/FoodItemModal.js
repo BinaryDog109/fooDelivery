@@ -2,11 +2,11 @@ import { Button, useToast } from "@chakra-ui/react";
 import { FoodItemForm } from "./FoodItemForm";
 import { HighModal } from "../../components/HighModal";
 import { useCRUD } from "../../hooks/useCRUD";
-import { useUserContext } from "../../hooks/useUserContext";
+import { useRestaurantOrderContext } from "../../hooks/useRestaurantOrderContext";
 import { useEffect, useMemo, useState } from "react";
 // Wraps a HighModal and inserts a FoodItemForm
 export const FoodItemModal = ({ data, isOpen, onClose, onOpen }) => {
-  const { id } = useUserContext();
+  const { id } = useRestaurantOrderContext();
   const { addDoc, updateDoc, response } = useCRUD("Restaurants", id, "Food");
   const toast = useToast();
   // foodInfo is a state to be bound to form controls

@@ -16,7 +16,7 @@ export const OrderCard = ({ data }) => {
   const { restaurantInfo } = useRestaurant(data.restaurantId);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef();
-  const { deliveryId, response: deliveryUser } = useUserContext();
+  const { id: deliveryId, response: deliveryUser } = useUserContext();
   const handleTakingOrder = async () => {
     const updatedAt = timestamp.fromDate(new Date());
     //   Btach update in two collections
@@ -37,7 +37,6 @@ export const OrderCard = ({ data }) => {
 
     onClose();
   };
-
   return (
     <>
       <OperationAlertDialog

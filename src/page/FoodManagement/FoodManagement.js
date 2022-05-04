@@ -12,7 +12,7 @@ import { FoodItemModal } from "./FoodItemModal";
 import { useMemo } from "react";
 import { AddIcon } from "@chakra-ui/icons";
 import { useGetDocuments } from "../../hooks/useGetDocuments";
-import { useUserContext } from "../../hooks/useUserContext";
+import { useRestaurantOrderContext } from "../../hooks/useRestaurantOrderContext";
 import { FoodCard } from "./FoodCard";
 import { OrderListAccordion } from "../../components/OrderListAccordion";
 
@@ -22,7 +22,7 @@ export const FoodManagement = ({
   activeOrder,
   setActiveOrder,
 }) => {
-  const { id, orders, orderError } = useUserContext();
+  const { id, orders, error: orderError } = useRestaurantOrderContext();
   const { docs, error } = useGetDocuments("Restaurants", id, "Food");
 
   const styles = useMemo(

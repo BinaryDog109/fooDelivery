@@ -1,13 +1,13 @@
 import { BellIcon } from "@chakra-ui/icons";
 import { Badge, Box } from "@chakra-ui/react";
 import { MenuOpenButton } from "../../components/MenuOpenButton";
-import { useUserContext } from "../../hooks/useUserContext";
+import { useRestaurantOrderContext } from "../../hooks/useRestaurantOrderContext";
 
 export const FoodManagementBell = ({
   setActiveOrder,
   setTabIndex
 }) => {
-  let { orders, orderError } = useUserContext();
+  let { orders, error: orderError } = useRestaurantOrderContext();
   orders = orders && orders.filter((order) => order.status === "Paid");
   const handleBellMenuItemSelected = (elemId) => {
     setTabIndex(1);

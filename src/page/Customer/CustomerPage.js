@@ -1,21 +1,14 @@
 import {
   Box,
-  Button,
-  Center,
   Container,
   Divider,
-  Image,
   List,
   ListItem,
-  MenuItem,
   ScaleFade,
   Tab,
   TabList,
   Tabs,
-  Text,
 } from "@chakra-ui/react";
-import { Icon } from "@chakra-ui/react";
-import { HiOutlineLocationMarker, HiOutlineClock } from "react-icons/hi";
 import { useMemo } from "react";
 import { Navbar } from "../../components/Navbar";
 import { Link } from "react-router-dom";
@@ -23,7 +16,6 @@ import { Route } from "react-router-dom";
 import { Switch } from "react-router-dom";
 import { RestaurantCard } from "./RestaurantCard";
 import { CartPopup } from "./CartPopup";
-import { useUserContext } from "../../hooks/useUserContext";
 import { RestaurantListItem } from "./RestaurantListItem";
 import { useGetDocuments } from "../../hooks/useGetDocuments";
 import { CheckoutCard } from "./CheckoutCard";

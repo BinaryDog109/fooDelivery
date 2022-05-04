@@ -18,7 +18,7 @@ const initState = {
 const storeReducer = (state, action) => {
   switch (action.type) {
     case "PENDING":
-      return { isPending: true, document: null, success: false, error: null };
+      return { ...state, isPending: true, success: false, error: null };
     case "ADDED_DOCUMENT":
       return {
         isPending: false,
@@ -35,9 +35,11 @@ const storeReducer = (state, action) => {
       };
     case "UPDATED_DOCUMENT":
       return {
+        ...state,
         isPending: false,
         success: "updated",
         error: null,
+        
       };
     case "DELETED_DOCUMENT":
       return {
@@ -75,8 +77,9 @@ export const useCRUD = (collection, id, subCollection) => {
   }
 
   const dispatchIfNotAborted = (action) => {
-    
-    if (!hasAborted) { dispatch(action) };
+    if (!hasAborted) {
+      dispatch(action);
+    }
   };
 
   const _addDoc = async (doc) => {
@@ -119,9 +122,11 @@ export const useCRUD = (collection, id, subCollection) => {
     dispatchIfNotAborted({ type: "PENDING" });
     const updatedAt = timestamp.fromDate(new Date());
     try {
-      const doc = await ref.doc(id).update({ ...data, updatedAt });
-      // doc will be undefined, if success
-      dispatchIfNotAborted({ type: "UPDATED_DOCUMENT" });
+      await ref.doc(id).update({ ...data, updatedAt });
+      const doc = await ref.doc(id).get();
+      dispatchIfNotAborted({
+        type: "UPDATED_DOCUMENT",
+      });
     } catch (error) {
       console.log("error", error);
       dispatchIfNotAborted({ type: "ERROR", payload: error.message });
@@ -133,7 +138,7 @@ export const useCRUD = (collection, id, subCollection) => {
       data.forEach((d) => {
         const createdAt = timestamp.fromDate(new Date());
         const newDocRef = ref.doc();
-        batch.set(newDocRef, {...d, createdAt});
+        batch.set(newDocRef, { ...d, createdAt });
       });
       const doc = await batch.commit();
       console.log("batch added:", doc);

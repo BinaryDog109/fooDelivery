@@ -21,7 +21,6 @@ import { useEffect } from "react";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { useCart } from "../../hooks/useCart";
-import { useUserContext } from "../../hooks/useUserContext";
 import { ItemAddMinusButton } from "./ItemAddMinusButton";
 
 export const CartPopup = ({basePath}) => {

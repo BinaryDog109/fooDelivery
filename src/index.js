@@ -8,13 +8,16 @@ import App from "./App";
 
 import { BrowserRouter } from "react-router-dom";
 import { UserContextProvider } from "./context/UserContext";
+import { AuthContextProvider } from "./context/AuthContext";
 
 ReactDOM.render(
   <BrowserRouter>
     <ChakraProvider theme={theme}>
-      <UserContextProvider>
-        <App />
-      </UserContextProvider>
+      <AuthContextProvider>
+        <UserContextProvider>
+          <App />
+        </UserContextProvider>
+      </AuthContextProvider>
     </ChakraProvider>
   </BrowserRouter>,
   document.getElementById("root")

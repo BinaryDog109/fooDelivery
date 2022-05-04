@@ -1,17 +1,17 @@
 import { Link } from "react-router-dom";
-import { SettingsIcon } from "@chakra-ui/icons";
-import { Image, Text } from "@chakra-ui/react";
+import { Button, Image, Text } from "@chakra-ui/react";
 
 import styles from "./Navbar.module.css";
 import { Box } from "@chakra-ui/react";
-import { MenuOpenButton } from "./MenuOpenButton";
+import { SettingsButton } from "./SettingsButton";
+import { useAuthContext } from "../hooks/useAuthContext";
 
-export const Navbar = ({  children }) => {
+export const Navbar = ({ children }) => {
   // TODO: Hamburger menu, useBreakpointValue
   // true = (0, base, sm) false = (sm, md) false = (md, upwards)
   // const isSmallScreen = useBreakpointValue({base: true, sm:false, md: false})
   // Filter out Paid Orders
-  
+  const { user } = useAuthContext();
   return (
     <Box
       pos={"relative"}
@@ -24,9 +24,25 @@ export const Navbar = ({  children }) => {
         {/* search bar */}
       </div>
       <nav className={styles.links}>
-        {/* Add more content in the nav if any */}
-        {children}
-        <MenuOpenButton Icon={SettingsIcon} />
+        {user && (
+          <>
+            <Text>Welcome, {user.displayName}</Text>
+            {/* Add more content in the nav if any */}
+            {children}
+            <Box ml={2}><SettingsButton /></Box>
+            
+          </>
+        )}
+        {!user && (
+          <>
+            <Link to={"/login"}>
+              <Button>Login</Button>
+            </Link>
+            <Link to={"/reg"}>
+              <Button>Sign up</Button>
+            </Link>
+          </>
+        )}
       </nav>
     </Box>
   );

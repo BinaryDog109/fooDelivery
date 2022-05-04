@@ -13,6 +13,7 @@ export const CustomerDisplayMap = ({
   deliveryLng,
   customerPostCode,
 }) => {
+  // console.log({customerPostCode})
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_THE_KEY,
     libraries,
@@ -103,8 +104,8 @@ export const CustomerDisplayMap = ({
           }}
         >
           {direction && <DirectionsRenderer directions={direction} />}
-          <Marker position={deliveryPos} />
-          <Marker position={customerPos} />
+          <Marker position={deliveryPos} label="driver" />
+          <Marker position={customerPos} label="customer" />
         </GoogleMap>
       </Box>
     </>

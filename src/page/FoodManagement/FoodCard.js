@@ -25,7 +25,7 @@ export const FoodCard = ({ data }) => {
   } = useDisclosure();
   const cancelRef = useRef();
 
-  const { id } = useUserContext();
+  const { restaurantId: id } = useUserContext();
   const { deleteDoc, response } = useCRUD("Restaurants", id, "Food");
   const toast = useToast();
   const handleDelete = (foodId) => {

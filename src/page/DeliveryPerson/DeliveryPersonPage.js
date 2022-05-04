@@ -42,16 +42,18 @@ export const DeliveryPersonPage = ({ basePath }) => {
       <Container p={2} style={styles} mt={5} borderRadius="md" boxShadow={"xl"}>
         {!alreadyhasOrder && docs && <ItemGrid data={docs} Card={OrderCard} />}
 
-        <Switch>
-          <Route exact path={basePath}>
-            <Link to={basePath + "/track"}>
-              <Button>Go to your active order</Button>
-            </Link>
-          </Route>
-          <Route path={basePath + "/track"}>
-            <OrderTrackingCard />
-          </Route>
-        </Switch>
+        {alreadyhasOrder && (
+          <Switch>
+            <Route exact path={basePath}>
+              <Link to={basePath + "/track"}>
+                <Button>Go to your active order</Button>
+              </Link>
+            </Route>
+            <Route path={basePath + "/track"}>
+              <OrderTrackingCard />
+            </Route>
+          </Switch>
+        )}
       </Container>
     </>
   );

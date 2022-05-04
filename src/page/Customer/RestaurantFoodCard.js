@@ -1,17 +1,11 @@
-import {
-  chakra,
-  Box,
-  Flex,
-  useColorModeValue,
-  Text,
-} from "@chakra-ui/react";
+import { chakra, Box, Flex, useColorModeValue, Text } from "@chakra-ui/react";
 import { MyThemeButton } from "../../components/MyThemeButton";
 import { useCart } from "../../hooks/useCart";
 import { ItemAddMinusButton } from "./ItemAddMinusButton";
 
 export const RestaurantFoodCard = ({ data, ...props }) => {
-  const {restaurantId, restaurantInfo} = props
-  
+  const { restaurantId, restaurantInfo } = props;
+
   const {
     userId,
     cart,
@@ -19,10 +13,12 @@ export const RestaurantFoodCard = ({ data, ...props }) => {
     updateUser,
     isPending: cartPendng,
   } = useCart();
+  console.log({cart})
   const foodInCartIndex =
     cart && cart.findIndex((item) => item.foodId === data.id);
   const foodInCart = cart && cart[foodInCartIndex];
   const handleCart = (sign, item) => {
+    
     if (foodInCartIndex > -1) {
       // If the food already exists in the cart, update the num in the cart
       item = cart[foodInCartIndex];
@@ -101,10 +97,12 @@ export const RestaurantFoodCard = ({ data, ...props }) => {
               item={data}
               handleClick={handleCart}
             />
-          ) : (!cart? null : (
-            <MyThemeButton onClick={() => handleCart("+", data)}>Add to Cart</MyThemeButton>
-          ))}
-        </Flex> 
+          ) : !cart ? null : (
+            <MyThemeButton onClick={() => handleCart("+", data)}>
+              Add to Cart
+            </MyThemeButton>
+          )}
+        </Flex>
       </Box>
     </Flex>
   );

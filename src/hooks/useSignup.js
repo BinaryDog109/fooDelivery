@@ -22,11 +22,11 @@ export const useSignup = () => {
       
       // add display name to user
       await res.user.updateProfile({ displayName })
+      
       // Create a user in the Users collection
       const ref = projectFirestore.collection("Users").doc(res.user.uid)
-
       // Adding properties based on different roles
-      if (roles === "customer ") {
+      if (roles === "customer") {
         // Add a cart prop to customers
         await ref.set({
           ...data,
@@ -42,6 +42,7 @@ export const useSignup = () => {
           lastname: data.lastname,
           roles: data.roles,
           email: data.email,
+          restaurantId: restaurantRef.id
         })
         batch.set(restaurantRef, {
           name: data.restaurantName,
@@ -55,7 +56,7 @@ export const useSignup = () => {
       else if (roles === "delivery") {
         await ref.set({
           ...data,
-          hasRole: null
+          hasOrder: null
         })
       }
 
@@ -71,7 +72,9 @@ export const useSignup = () => {
       if (!isCancelled) {
         setError(err.message)
         setIsPending(false)
+        console.log(err)
       }
+      
     }
   }
 

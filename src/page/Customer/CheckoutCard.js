@@ -25,6 +25,7 @@ import { OperationAlertDialog } from "../../components/OperationAlertDialog";
 import { ReturnButton } from "../../components/ReturnButton";
 import { useCart } from "../../hooks/useCart";
 import { useCRUD } from "../../hooks/useCRUD";
+import { useUserContext } from "../../hooks/useUserContext";
 
 export const CheckoutCard = ({basePath}) => {
   // Userd by the Paid Now dialog
@@ -32,6 +33,9 @@ export const CheckoutCard = ({basePath}) => {
   const cancelRef = useRef();
   const history = useHistory();
   const { userId, cart, error: cartError, updateUser, isPending: cartPendng } = useCart();
+  // Get user info
+  const { response: userResponse } = useUserContext()
+  const userInfo = userResponse.document
   const { batchAdd, response } = useCRUD("Orders");
   const toast = useToast();
   const totalPrice =
@@ -59,7 +63,7 @@ export const CheckoutCard = ({basePath}) => {
     Object.keys(ordersObj).map((restaurantId) => {
       const newOrder = {
         status: "Paid",
-        postCode: "SO16 3UF",
+        postCode: userInfo.postCode,
         restaurantId,
         uid: userId,
         food: ordersObj[restaurantId].map((item) => ({
@@ -150,7 +154,8 @@ export const CheckoutCard = ({basePath}) => {
                       ...From {ordersObj[restaurantId][0].restaurantInfo.name}
                     </Heading>
                     <Text maxW={"sm"} whiteSpace="normal" textAlign={"left"}>
-                      {ordersObj[restaurantId][0].restaurantInfo.address}
+                      {ordersObj[restaurantId][0].restaurantInfo.address}, 
+                      {ordersObj[restaurantId][0].restaurantInfo.postCode}
                     </Text>
                   </TableCaption>
                   <Thead>
@@ -180,7 +185,7 @@ export const CheckoutCard = ({basePath}) => {
               Total Price
             </Heading>
             <Text>£{totalPrice}</Text>
-            <Text fontSize={"sm"}>Deliver to: your address</Text>
+            <Text fontSize={"sm"}>Deliver to: {userInfo.postCode}</Text>
             <Button
               px={2}
               py={1}

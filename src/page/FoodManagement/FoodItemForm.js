@@ -13,7 +13,7 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 import { useCRUD } from "../../hooks/useCRUD";
-import { useUserContext } from "../../hooks/useUserContext";
+import { useRestaurantOrderContext } from "../../hooks/useRestaurantOrderContext";
 import { useEffect, useState } from "react";
 import "./FoodItemForm.css";
 import {
@@ -35,7 +35,7 @@ export const FoodItemForm = ({
 }) => {
   const defaultImageUrl = "/img/food-unsplash.jpg";
   const [isImageUploading, setIsImageUploading] = useState(false);
-  const { orders, restaurantInfo } = useUserContext();
+  const { orders, restaurantInfo } = useRestaurantOrderContext();
   const purchasedUsers = orders.map((order) => ({ userId: order.uid }));
   // Remove duplicates user ids
   const uniqPurchasedUsers = purchasedUsers.filter(
