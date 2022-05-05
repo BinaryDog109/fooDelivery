@@ -13,7 +13,6 @@ export const RestaurantFoodCard = ({ data, ...props }) => {
     updateUser,
     isPending: cartPendng,
   } = useCart();
-  console.log({cart})
   const foodInCartIndex =
     cart && cart.findIndex((item) => item.foodId === data.id);
   const foodInCart = cart && cart[foodInCartIndex];

@@ -40,7 +40,7 @@ export const useGetDocuments = (collection, id, subCollection, _query, _orderBy)
       (err) => {setError(err.message); setPending(false)}
     );
 
-    return () => unsub();
+    return () => {unsub()};
   }, [collection, id, subCollection, query, orderBy]);
 
   return { docs, error, isPending };

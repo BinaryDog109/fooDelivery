@@ -28,8 +28,8 @@ export const CartPopup = ({basePath}) => {
   const { userId, cart, updateUser, isPending, success } = useCart();
   // Handles the operations' response: resets the form if success, displays a toast
   // You can use a simple if statement but toast() will throw an error (try update the state while rendering)
-  useEffect(() => {
-    if (success) {
+  useEffect(() => {    
+    if (success === "updated") {
       toast({
         title: "Cart updated.",
         status: "success",

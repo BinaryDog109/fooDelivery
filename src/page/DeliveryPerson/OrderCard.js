@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import {
   Flex,
   useColorModeValue,
@@ -13,7 +13,7 @@ import { useUserContext } from "../../hooks/useUserContext";
 import { useCRUD } from "../../hooks/useCRUD";
 import { projectFirestore, timestamp } from "../../firebase/config";
 export const OrderCard = ({ data }) => {
-  const { restaurantInfo } = useRestaurant(data.restaurantId);
+  const { restaurantInfo, unsubFunction } = useRestaurant(data.restaurantId);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef();
   const { id: deliveryId, response: deliveryUser } = useUserContext();
@@ -37,6 +37,13 @@ export const OrderCard = ({ data }) => {
 
     onClose();
   };
+  useEffect(() => {
+  
+    return () => {
+      unsubFunction && unsubFunction()
+    }
+  }, [unsubFunction])
+  
   return (
     <>
       <OperationAlertDialog

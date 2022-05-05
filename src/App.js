@@ -19,7 +19,7 @@ function App() {
   const deliveryBasePath = "/de";
   const signupBasePath = "/reg";
   const loginBasePath = "/login";
-  console.log("app renders!");
+  // console.log("app renders!");
   return (
     authIsReady && (
       <div className="App">

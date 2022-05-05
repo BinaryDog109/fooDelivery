@@ -1,11 +1,12 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useRef, useState } from "react";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useCRUD } from "../hooks/useCRUD";
 
 export const UserContext = createContext();
 
 export const UserContextProvider = ({ children }) => {
-  const { user } = useAuthContext();
+  const { user, authType } = useAuthContext();
+  const [unsubFunction, setUnsubFunction] = useState(null);
   const uid = user && user.uid;
   const {
     getDoc: getUserInfo,
@@ -15,13 +16,22 @@ export const UserContextProvider = ({ children }) => {
   // Prevent an infinite loop
   useEffect(() => {
     if (uid) {
-      getUserInfo(uid);
+      const unsub = getUserInfo(uid);
+      // Do not directly store unsub - React will think it is a prev-state callback!
+      setUnsubFunction(() => unsub);
     }
   }, [getUserInfo, uid]);
+  // If a user log out, detach its listener on the document
+  useEffect(() => {
+    if (authType === "LOGOUT" && unsubFunction) {
+      console.log("detaching the listner");
+      unsubFunction();
+    }
+  }, [authType, unsubFunction]);
 
   const userInfo = user && response.document;
   const roles = userInfo && userInfo.roles;
-  // console.log(roles)
+
   //  Get the restaurant this user creates if any
   const restaurantId = userInfo && userInfo.restaurantId;
 
@@ -45,29 +55,3 @@ export const UserContextProvider = ({ children }) => {
   );
 };
 
-// // const id = "jqujejy9RKZCYLILWq6V"; // User Auth Id
-// // const id = "Rnel0gMCSsIf8OGX0KZ4"
-// const id = "Rnel0gMCSsIf8OGX0KZ4" // User Auth Id 2 (to test delivery)
-// // A hard-coded delivery person id
-// create a hasOrder field after a driver signs up
-// const deliveryId = "3teqWWAAhZQjzyd0AAYJ"
-// const { getDoc, updateDoc: updateUser, response } = useCRUD("Users");
-// // Get user's info
-// // Todo: After a user has signed up, create a cart for the user
-// useEffect(() => {
-//   // getDoc(deliveryId);
-//   getDoc(id)
-// }, [getDoc]);
-
-// Restaurant manager context
-// const id = "Mbsj4jfzNKIfoT2KKPPJ";
-// const { docs: orders, error: orderError } = useGetDocuments(
-//   "Orders",
-//   null,
-//   null,
-//   ["restaurantId", "==", id],
-//   ["createdAt", "desc"]
-// );
-// const {restaurantInfo} = useRestaurant(id)
-// const context = {id, orders, orderError, restaurantInfo}
-// return restaurantInfo && (

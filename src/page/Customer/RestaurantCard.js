@@ -14,19 +14,29 @@ import { RestaurantFoodCard } from "./RestaurantFoodCard";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { ReturnButton } from "../../components/ReturnButton";
 import { useRestaurant } from "../../hooks/useRetaurant";
+import { useEffect } from "react";
 
 export const RestaurantCard = () => {
-  const {id: restaurantId} = useParams();
-  const { docs: food, error } = useGetDocuments("Restaurants", restaurantId, "Food");
+  const { id: restaurantId } = useParams();
+  const { docs: food, error } = useGetDocuments(
+    "Restaurants",
+    restaurantId,
+    "Food"
+  );
   const history = useHistory();
-  const {restaurantInfo} = useRestaurant(restaurantId)
-  if (food) food.restaurantId = restaurantId
+  const { restaurantInfo, unsubFunction } = useRestaurant(restaurantId);
+  useEffect(() => {
+    return () => {
+      unsubFunction && unsubFunction();
+    };
+  }, [unsubFunction]);
+  if (food) food.restaurantId = restaurantId;
 
-  return !restaurantInfo? null : (
+  return !restaurantInfo ? null : (
     <>
       {error && <div>{error}</div>}
       <ScaleFade in={true}>
-        <Box p={2} >
+        <Box p={2}>
           <Box textAlign={"left"}>
             <ReturnButton history={history} />
           </Box>
@@ -38,11 +48,12 @@ export const RestaurantCard = () => {
           >
             {restaurantInfo.name}
           </Heading>
+          <Text my={2}>{restaurantInfo.description}</Text>
           {food && (
             <ItemGrid
               columns={{ sm: 1, md: 2 }}
               data={food}
-              elemProps={{restaurantId, restaurantInfo}}
+              elemProps={{ restaurantId, restaurantInfo }}
               Card={RestaurantFoodCard}
             />
           )}

@@ -39,7 +39,6 @@ const storeReducer = (state, action) => {
         isPending: false,
         success: "updated",
         error: null,
-        
       };
     case "DELETED_DOCUMENT":
       return {
@@ -104,15 +103,16 @@ export const useCRUD = (collection, id, subCollection) => {
       dispatchIfNotAborted({ type: "ERROR", payload: err.message });
     }
   };
-  const _getDoc = async (id) => {
+  const _getDoc = (id) => {
     dispatch({ type: "PENDING" });
-    await ref.doc(id).onSnapshot((docSnapshot) => {
-      dispatchIfNotAborted({
-        type: "GOT_DOCUMENT",
-        payload: { ...docSnapshot.data() },
-      });
-    });
     try {
+      const unsub = ref.doc(id).onSnapshot((docSnapshot) => {
+        dispatchIfNotAborted({
+          type: "GOT_DOCUMENT",
+          payload: { ...docSnapshot.data() },
+        });
+      });
+      return unsub;
     } catch (err) {
       dispatchIfNotAborted({ type: "ERROR", payload: err.message });
     }
