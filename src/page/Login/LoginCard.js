@@ -35,6 +35,7 @@ export const LoginCard = () => {
     event.preventDefault();
     login(form.email, form.password);
   };
+  console.log(error)
   return (
     <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
       <Stack align={"center"}>

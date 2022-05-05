@@ -24,7 +24,6 @@ export const FoodManagement = ({
 }) => {
   const { id, orders, error: orderError } = useRestaurantOrderContext();
   const { docs, error } = useGetDocuments("Restaurants", id, "Food");
-
   const styles = useMemo(
     () => ({
       width: "85%",

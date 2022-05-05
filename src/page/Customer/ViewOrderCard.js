@@ -16,6 +16,8 @@ export const ViewOrderCard = ({ basePath }) => {
     ["uid", "==", id],
     ["createdAt", "desc"]
   );
+  // console.log({id})
+  // console.log({orders})
   const history = useHistory();
   return useMemo(() => {
     return (
