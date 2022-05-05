@@ -49,7 +49,8 @@ export const useSignup = () => {
           description: data.restaurantDescription,
           postCode: data.postCode,
           address: data.restaurantAddress,
-          uid: res.user.uid
+          uid: res.user.uid,
+          status: "waiting"
         })
         await batch.commit()
       }

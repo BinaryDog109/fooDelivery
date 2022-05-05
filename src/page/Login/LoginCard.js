@@ -9,10 +9,16 @@ import {
   Heading,
   Text,
   useColorModeValue,
+  Center,
+  useDisclosure,
 } from "@chakra-ui/react";
+import { FcGoogle } from 'react-icons/fc';
 import { useState } from "react";
 import { useLogin } from "../../hooks/useLogin";
+import { GoogleSignInSelectRoles } from "./GoogleSignInSelectRoles";
 export const LoginCard = () => {
+  // Used by google login
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const { login, isPending, error } = useLogin();
   //   Controlled inputs state
   const [form, setForm] = useState({
@@ -63,13 +69,13 @@ export const LoginCard = () => {
                 onChange={handleChange}
               />
             </FormControl>
-            <Stack spacing={10}>
+            <Stack spacing={5}>
               <Stack
                 direction={{ base: "column", sm: "row" }}
                 align={"start"}
                 justify={"space-between"}
               >
-                <Link color={"blue.400"}>Forgot password?</Link>
+                {/* <Link color={"blue.400"}>Forgot password?</Link> */}
               </Stack>
               <Button
                 bg={"blue.400"}
@@ -82,6 +88,12 @@ export const LoginCard = () => {
               >
                 Log in
               </Button>
+              <Button onClick={onOpen} w={"full"} variant={"outline"} leftIcon={<FcGoogle />}>
+                <Center>
+                  <Text>Sign in with Google</Text>
+                </Center>
+              </Button>
+              <GoogleSignInSelectRoles onClose={onClose} onOpen={onOpen} isOpen={isOpen} />
               {error && <Text>Error: {error}</Text>}
             </Stack>
           </form>

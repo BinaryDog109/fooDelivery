@@ -31,10 +31,8 @@ export const UserContextProvider = ({ children }) => {
 
   const userInfo = user && response.document;
   const roles = userInfo && userInfo.roles;
-
   //  Get the restaurant this user creates if any
   const restaurantId = userInfo && userInfo.restaurantId;
-
   const context = { id: uid, roles, updateUser, response, restaurantId };
 
   // Ensure roles has been resolved before rendering the children
