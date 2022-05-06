@@ -10,6 +10,7 @@ import { LoginPage } from "./page/Login/LoginPage";
 import { useAuthContext } from "./hooks/useAuthContext";
 import { useUserContext } from "./hooks/useUserContext";
 import { Redirect } from "react-router-dom";
+import {RestaurantManagementPage} from "./page/RestaurantManagement/RestaurantManagementPage"
 
 function App() {
   const { authIsReady } = useAuthContext();
@@ -19,6 +20,7 @@ function App() {
   const deliveryBasePath = "/de";
   const signupBasePath = "/reg";
   const loginBasePath = "/login";
+  const adminBasePath = "/admin"
   // console.log("app renders!");
   return (
     authIsReady && (
@@ -62,7 +64,17 @@ function App() {
             )}
             {roles === "delivery" && <Redirect to={deliveryBasePath} />}
             {roles === "guest" && <LoginPage />}
+            {roles === "admin" && <Redirect to={adminBasePath} />}
           </Route>
+          <Route path={adminBasePath}>
+            {roles === "admin" ? (
+              <RestaurantManagementPage basePath={adminBasePath} />
+            ) : (
+              <Redirect to={loginBasePath} />
+            )}
+          </Route>
+          
+
         </Switch>
       </div>
     )
