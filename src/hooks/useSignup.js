@@ -18,6 +18,9 @@ export const useSignup = () => {
       if (!res) {
         throw new Error('Could not complete signup')
       }
+
+      await res.user.sendEmailVerification()
+
       const displayName = `${data.firstname} ${data.lastname}` 
       
       // add display name to user
