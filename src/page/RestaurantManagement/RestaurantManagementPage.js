@@ -31,14 +31,6 @@ export const RestaurantManagementPage = ({basePath}) => {
     return (
         <>
             <Navbar>
-                <Switch>
-                    <Route path={basePath}>
-                        <RestaurantManagementBell
-                            setActiveOrder={setActiveOrder}
-                            setTabIndex={setTabIndex}
-                        />
-                    </Route>
-                </Switch>
             </Navbar>
             <Switch>
                 <Route path={basePath}>

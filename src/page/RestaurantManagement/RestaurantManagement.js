@@ -96,7 +96,7 @@ export const RestaurantManagement = ({
                     <Container p={2} style={listStyles} mt={5} borderRadius="md" boxShadow={"xl"}>
                         {error && <div>{error}</div>}
                         <Switch>
-                            <Route exact path={"/restaurantmanage"}>
+                            <Route exact path={"/admin"}>
                                 <ScaleFade in={true}>
                                     <TabPanels pt={5} mb={yOffset}>
                                         <TabPanel p={0}>
