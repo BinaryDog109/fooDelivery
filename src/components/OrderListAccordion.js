@@ -97,7 +97,7 @@ export const OrderListAccordion = ({
             }, 0)
             .toFixed(2);
         return (
-          <Box key={elem.id}>
+          <Box id={elem.id} key={elem.id}>
             <AccordionItem borderRadius={10}>
               <h2>
                 <AccordionButton>
