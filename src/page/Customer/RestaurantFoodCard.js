@@ -1,3 +1,6 @@
+/**
+ * The FoodCard design is based on the template https://choc-ui.com/docs/elements/cards
+ */
 import { chakra, Box, Flex, useColorModeValue, Text } from "@chakra-ui/react";
 import { MyThemeButton } from "../../components/MyThemeButton";
 import { useCart } from "../../hooks/useCart";

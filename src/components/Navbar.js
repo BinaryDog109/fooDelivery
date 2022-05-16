@@ -20,8 +20,9 @@ export const Navbar = ({ children }) => {
       className={styles.header}
     >
       <div className={styles.logo}>
-        <Image w={170} src="/img/logo.svg" />
-        {/* search bar */}
+        <Link to={"/"}>
+          <Image w={170} src="/img/logo.svg" />
+        </Link>
       </div>
       <nav className={styles.links}>
         {user && (
@@ -29,8 +30,9 @@ export const Navbar = ({ children }) => {
             <Text>Welcome, {user.displayName}</Text>
             {/* Add more content in the nav if any */}
             {children}
-            <Box ml={2}><SettingsButton /></Box>
-            
+            <Box ml={2}>
+              <SettingsButton />
+            </Box>
           </>
         )}
         {!user && (
