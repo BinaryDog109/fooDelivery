@@ -7,6 +7,7 @@ import { DeliveryPersonPage } from "./page/DeliveryPerson/DeliveryPersonPage";
 import { FoodManagementPage } from "./page/FoodManagement/FoodManagementPage";
 import { SignupPage } from "./page/Signup/SignupPage";
 import { LoginPage } from "./page/Login/LoginPage";
+import { HomePage } from "./page/Home/HomePage";
 import { useAuthContext } from "./hooks/useAuthContext";
 import { useUserContext } from "./hooks/useUserContext";
 import { Redirect } from "react-router-dom";
@@ -15,6 +16,7 @@ import {RestaurantManagementPage} from "./page/RestaurantManagement/RestaurantMa
 function App() {
   const { authIsReady } = useAuthContext();
   const { roles } = useUserContext();
+  const homeBasePath = "/";
   const foodManagementBasePath = "/foodmanage";
   const customerBasePath = "/cus";
   const deliveryBasePath = "/de";
@@ -26,6 +28,13 @@ function App() {
     authIsReady && (
       <div className="App">
         <Switch>
+        <Route exact path={homeBasePath}>
+            {roles === "guest" ? (
+              <HomePage basePath={homeBasePath} />
+            ) : (
+              <Redirect to={loginBasePath} />
+            )}
+          </Route>
           <Route path={customerBasePath}>
             {roles === "customer" ? (
               <CustomerPage basePath={customerBasePath} />

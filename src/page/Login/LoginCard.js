@@ -1,3 +1,6 @@
+/**
+ * The Login form design comes from https://chakra-templates.dev/forms/authentication
+ */
 import {
   Box,
   FormControl,
@@ -12,6 +15,7 @@ import {
   Center,
   useDisclosure,
 } from "@chakra-ui/react";
+import { Link as RouterLink } from "react-router-dom";
 import { FcGoogle } from 'react-icons/fc';
 import { useState } from "react";
 import { useLogin } from "../../hooks/useLogin";
@@ -39,9 +43,13 @@ export const LoginCard = () => {
   return (
     <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
       <Stack align={"center"}>
-        <Heading fontSize={"4xl"}>Sign in to your account</Heading>
+        <Heading fontSize={"4xl"} bgGradient="linear(to-r, band1.100, band2.600)"
+            bgClip="text">Sign in to your account</Heading>
         <Text fontSize={"lg"} color={"gray.600"}>
           What do you want to eat today? 🤤
+        </Text>
+        <Text fontSize={"lg"} color={"gray.600"}>
+          No account yet? <Link color={"blue.300"} to={"/reg"} as={RouterLink}>Sign up</Link>
         </Text>
       </Stack>
       <Box

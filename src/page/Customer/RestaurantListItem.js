@@ -2,7 +2,7 @@ import { Box, Center, Divider, Image, Text } from "@chakra-ui/react";
 import { Icon } from "@chakra-ui/react";
 import { HiOutlineLocationMarker, HiOutlineClock } from "react-icons/hi";
 
-export const RestaurantListItem = ({data}) => {
+export const RestaurantListItem = ({data, images}) => {
   return (
     <>
       <Box p={4} display={{ md: "flex" }}>
@@ -10,8 +10,8 @@ export const RestaurantListItem = ({data}) => {
           <Image
             borderRadius="lg"
             width={{ md: 40 }}
-            src={"https://bit.ly/2jYM25F"}
-            alt="Woman paying for a purchase"
+            src={images[Math.round(Math.random() * 10)]}
+            alt="The restaurant image"
           />
         </Box>
         <Box textAlign={"left"} mt={{ base: 4, md: 0 }} ml={{ md: 6 }}>

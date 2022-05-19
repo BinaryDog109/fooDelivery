@@ -1,3 +1,6 @@
+/**
+ * The Signin form design comes from https://chakra-templates.dev/forms/authentication
+ */
 import {
   Flex,
   Box,
@@ -16,6 +19,7 @@ import {
   Radio,
   RadioGroup,
 } from "@chakra-ui/react";
+import { Link as RouterLink } from "react-router-dom";
 import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { ExtraCustomerForm } from "./ExtraCustomerForm";
@@ -58,11 +62,15 @@ export const SignupCard = () => {
   return (
     <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
       <Stack align={"center"}>
-        <Heading fontSize={"4xl"} textAlign={"center"}>
+        <Heading fontSize={"4xl"} textAlign={"center"} bgGradient="linear(to-r, band1.100, band2.600)"
+            bgClip="text">
           Sign up
         </Heading>
         <Text fontSize={"lg"} color={"gray.600"}>
           Sign up to get the best food in the world ✌️
+        </Text>
+        <Text fontSize={"lg"} color={"gray.600"}>
+          Have an account already? <Link color={"blue.300"} to={"/login"} as={RouterLink}>Sign in</Link>
         </Text>
       </Stack>
       <Box

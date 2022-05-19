@@ -6,6 +6,7 @@ export const UserContext = createContext();
 
 export const UserContextProvider = ({ children }) => {
   const { user, authType } = useAuthContext();
+  // console.log({user})
   const [unsubFunction, setUnsubFunction] = useState(null);
   const uid = user && user.uid;
   const {
