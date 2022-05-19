@@ -49,7 +49,7 @@ export const RestaurantListItem = ({data, images}) => {
         >
           <Text>
             <Icon mr={1} as={HiOutlineLocationMarker}></Icon>
-            <span>SO16 3UF</span>
+            <span>{data.postCode}</span>
           </Text>
           <Text>
             <Icon mr={1} as={HiOutlineClock} />
