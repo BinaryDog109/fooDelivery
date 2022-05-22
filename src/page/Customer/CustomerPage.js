@@ -33,7 +33,10 @@ export const CustomerPage = ({ basePath = "/" }) => {
     }),
     []
   );
-  const { docs: restaurants, error } = useGetDocuments("Restaurants");
+  const { docs: restaurants, error } = useGetDocuments("Restaurants", null, null, [
+    "status", "==", "accepted"
+  ]);
+
   const images = [
     "https://bit.ly/2jYM25F",
     "https://images.unsplash.com/photo-1424847651672-bf20a4b0982b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
