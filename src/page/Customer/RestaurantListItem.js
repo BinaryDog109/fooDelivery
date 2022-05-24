@@ -10,7 +10,7 @@ export const RestaurantListItem = ({data, images}) => {
           <Image
             borderRadius="lg"
             width={{ md: 40 }}
-            src={images[Math.round(Math.random() * 10)]}
+            src={images[Math.floor(Math.random() * 10)]}
             alt="The restaurant image"
           />
         </Box>

@@ -15,15 +15,15 @@ export const CustomerDisplayMap = ({
 }) => {
   // console.log({customerPostCode})
   const { isLoaded } = useJsApiLoader({
-    // googleMapsApiKey: process.env.REACT_APP_THE_KEY,
-    googleMapsApiKey: "AIzaSyBcg-oLNdlXQxApmwXPKYz3jZUtOlGuHXk", // Only for deployment
+    googleMapsApiKey: process.env.REACT_APP_THE_KEY,
+    // googleMapsApiKey: "AIzaSyBcg-oLNdlXQxApmwXPKYz3jZUtOlGuHXk", // Only for deployment
     language: "en",
     libraries,
   });
   const [map, setMap] = useState(/** @type google.maps.Map */ (null));
   const [direction, setDirection] = useState(null);
   const [customerPos, setCustomerPos] = useState(null);
-  const [deliveryPos, setDeliveryPos] = useState(null)
+  const [deliveryPos, setDeliveryPos] = useState(null);
   const getCoordinatesFromPostCode = (geocoder, postCode) => {
     return new Promise(async (res, rej) => {
       const { results } = await geocoder.geocode({ address: postCode });
@@ -56,7 +56,7 @@ export const CustomerDisplayMap = ({
     );
     setCustomerPos(customerCoords);
     const deliveryCoords = { lat: deliveryLat, lng: deliveryLng };
-    setDeliveryPos(deliveryCoords)
+    setDeliveryPos(deliveryCoords);
     const direction = await getDirection(
       service,
       customerCoords,
@@ -105,9 +105,14 @@ export const CustomerDisplayMap = ({
             setMap(map);
           }}
         >
-          {direction && <DirectionsRenderer directions={direction} />}
-          <Marker position={deliveryPos} label="driver" />
-          <Marker position={customerPos} label="customer" />
+          {direction && (
+            <DirectionsRenderer
+              options={{ suppressMarkers: true }}
+              directions={direction}
+            />
+          )}
+          <Marker icon={"/img/map-driver.png"} position={deliveryPos} />
+          <Marker icon={"/img/map-user.png"} position={customerPos} />
         </GoogleMap>
       </Box>
     </>

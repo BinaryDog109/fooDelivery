@@ -11,8 +11,8 @@ import { useCRUD } from "../hooks/useCRUD";
 const libraries = ["places"];
 export const DisplayMap = ({ order = null, restaurant = null, orderId }) => {
   const { isLoaded } = useJsApiLoader({
-    // googleMapsApiKey: process.env.REACT_APP_THE_KEY,
-    googleMapsApiKey: "AIzaSyBcg-oLNdlXQxApmwXPKYz3jZUtOlGuHXk", // Only for deployment
+    googleMapsApiKey: process.env.REACT_APP_THE_KEY,
+    // googleMapsApiKey: "AIzaSyBcg-oLNdlXQxApmwXPKYz3jZUtOlGuHXk", // Only for deployment
     language: "en",
     libraries,
   });
@@ -171,9 +171,33 @@ export const DisplayMap = ({ order = null, restaurant = null, orderId }) => {
             setMap(map);
           }}
         >
-          {direction && <DirectionsRenderer directions={direction} />}
-          {direction2 && <DirectionsRenderer directions={direction2} />}
-          {currentPos && <Marker position={currentPos}></Marker>}
+          {direction && (
+            <DirectionsRenderer
+              options={{ suppressMarkers: true }}
+              directions={direction}
+            />
+          )}
+          {direction2 && (
+            <DirectionsRenderer
+              options={{ suppressMarkers: true }}
+              directions={direction2}
+            />
+          )}
+          {currentPos && (
+            <Marker icon={"/img/map-user.png"} position={currentPos}></Marker>
+          )}
+          {restaurantCoordinates && (
+            <Marker
+              icon={"/img/map-restaurant.png"}
+              position={restaurantCoordinates}
+            ></Marker>
+          )}
+          {orderCoordinates && (
+            <Marker
+              icon={"/img/map-customer_2.png"}
+              position={orderCoordinates}
+            ></Marker>
+          )}
           {/* {orderlatLng && <Marker position={orderlatLng}></Marker>}
         {restaurantLatLng && <Marker position={restaurantLatLng}></Marker>} */}
         </GoogleMap>
