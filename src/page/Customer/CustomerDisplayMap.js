@@ -15,8 +15,8 @@ export const CustomerDisplayMap = ({
 }) => {
   // console.log({customerPostCode})
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: process.env.REACT_APP_THE_KEY,
-    // googleMapsApiKey: "AIzaSyBcg-oLNdlXQxApmwXPKYz3jZUtOlGuHXk", // Only for deployment
+    // googleMapsApiKey: process.env.REACT_APP_THE_KEY,
+    googleMapsApiKey: "AIzaSyBcg-oLNdlXQxApmwXPKYz3jZUtOlGuHXk", // Only for deployment
     language: "en",
     libraries,
   });
