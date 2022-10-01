@@ -1,5 +1,5 @@
 # The latest branch is `master`
-# This project presents a food delivery web application where users can order and track their food. Simply download, unzip it and run `npm start`. You can first register as a new customer and there are placeholder restaurants for you to order food. As a student project, there is no payment APIs involved in this application.
+- This project presents a food delivery web application where users can order and track their food. Simply download, unzip it and run `npm start`. You can first register as a new customer and there are placeholder restaurants for you to order food. As a student project, there is no payment APIs involved in this application.
 # Tech
 - [Chakra UI](https://chakra-ui.com/)
 - [React](https://reactjs.org/)
