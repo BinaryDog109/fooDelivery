@@ -4,6 +4,7 @@
 - [Chakra UI](https://chakra-ui.com/)
 - [React](https://reactjs.org/)
 - [Firebase: Firestore & Auth](https://firebase.google.com/)
+- [Google Maps Platform](https://developers.google.com/maps)
 # Credit
 - [Choc UI](https://choc-ui.com/)
 - The design pattern for the authentication module comes from [this amazing course](https://www.udemy.com/course/build-web-apps-with-react-firebase/)
