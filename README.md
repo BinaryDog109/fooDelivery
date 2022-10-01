@@ -8,3 +8,5 @@
 - [Choc UI](https://choc-ui.com/)
 - The design pattern for the authentication module comes from [this amazing course](https://www.udemy.com/course/build-web-apps-with-react-firebase/)
 - ❤ and 💦 from Tianyi (Josh), Zhiyu (Drake) and Siming
+# Todo
+- Upload video?
