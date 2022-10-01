@@ -1,4 +1,4 @@
-# The latest branch is [`master`](https://github.com/BinaryDog109/fooDelivery)
+# The latest branch is [`TSD`](https://github.com/BinaryDog109/fooDelivery/tree/TSD)
 - This project presents a food delivery web application where users can order and track their food. Simply download, unzip it and run `npm start`. You can first register as a new customer and there are placeholder restaurants for you to order food. As a student project, there is no payment APIs involved in this application.
 # Tech
 - [Chakra UI](https://chakra-ui.com/)
